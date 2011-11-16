@@ -127,6 +127,10 @@ get '/style.css' do
   sass :style
 end
 
+get '/:channel' do
+  redirect "/#{params[:channel]}/"
+end
+
 get '/:channel/search' do
   @channel = "##{params[:channel].gsub '.', '#'}"
   @messages = Message.find_by_channel_and_fulltext(@channel, params[:q])
