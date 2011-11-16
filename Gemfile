@@ -6,3 +6,5 @@ gem 'sass'
 gem 'sequel'
 
 gem 'mysql2'
+
+gem 'thin'
