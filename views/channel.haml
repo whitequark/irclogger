@@ -4,7 +4,7 @@
     %input#filter
     %span.clear-input#clear_filter{:style => 'display:none'}
 
-  = haml :_messages, locals: { :messages => @messages, :dates => false }
+  = haml :_messages, locals: { :messages => @messages, :dates => false, :panel => true }
 
   - if @messages.empty?
     There are no messages recorded for #{params[:date]}.

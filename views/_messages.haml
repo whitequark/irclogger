@@ -1,4 +1,4 @@
-%div.log-messages
+%div{:class => "log-messages #{'with-panel' if panel}"}
   - messages.each do |message|
     %div{:class => "#{message.type}"}
       %a{:href => "##{message.timestamp}", :class => 'timestamp', :id => "#{message.timestamp}"}

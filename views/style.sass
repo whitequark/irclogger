@@ -141,11 +141,14 @@ header
 
   .log-messages
     position: absolute
-    top: 40px
+    top: 10px
     right: 10px
     bottom: 10px
     left: $channels_width + 10px
     overflow: auto
+
+    &.with-panel
+      top: 40px
 
 #log:not(.highlight) div, div.highlight
   &.talk
