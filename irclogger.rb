@@ -133,7 +133,15 @@ end
 
 get '/:channel/search' do
   @channel = "##{params[:channel].gsub '.', '#'}"
-  @messages = Message.find_by_channel_and_fulltext(@channel, params[:q])
+  @limit = 300
+
+  if params[:q].length >= 3
+    @messages = Message.find_by_channel_and_fulltext(@channel, params[:q])
+    if @messages.count > @limit
+      @messages = @messages.limit(@limit)
+      @over_limit = true
+    end
+  end
 
   haml :search
 end

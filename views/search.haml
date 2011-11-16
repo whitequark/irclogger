@@ -1,5 +1,12 @@
 %section#log
-  = haml :_messages, locals: { :messages => @messages, :dates => true, :panel => false }
+  - if @over_limit
+    There were more than #{@limit} matching messages. Only first #{@limit} are shown.
+    = haml :_messages, locals: { :messages => @messages, :dates => true, :panel => true }
+  - elsif @messages
+    = haml :_messages, locals: { :messages => @messages, :dates => true, :panel => false }
 
-  - if @messages.empty?
-    No messages are found.
+  - if @messages.nil? || @messages.empty?
+    - if params[:q].length < 3
+      Enter at least three letters as a keyword.
+    - else
+      No messages are found.
