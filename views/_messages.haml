@@ -1,19 +1,20 @@
-- messages.each do |message|
-  %div{:class => "#{message.type}"}
-    %a{:href => "##{message.timestamp}", :class => 'timestamp', :id => "#{message.timestamp}"}
-      - if dates
-        = Time.at(message.timestamp).strftime("%Y-%m-%d %H:%M")
+%div.log-messages
+  - messages.each do |message|
+    %div{:class => "#{message.type}"}
+      %a{:href => "##{message.timestamp}", :class => 'timestamp', :id => "#{message.timestamp}"}
+        - if dates
+          = Time.at(message.timestamp).strftime("%Y-%m-%d %H:%M")
+        - else
+          = Time.at(message.timestamp).strftime("%H:%M")
+
+      - if message.talk?
+        &lt;
+        %span.nickname>= message.nick
+        &gt;
+
+        = auto_link_urls(escape_html message.line)
+
       - else
-        = Time.at(message.timestamp).strftime("%H:%M")
+        = message.line
 
-    - if message.talk?
-      &lt;
-      %span.nickname>= message.nick
-      &gt;
-
-      = auto_link_urls(escape_html message.line)
-
-    - else
-      = message.line
-
-    %br
+      %br
