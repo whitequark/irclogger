@@ -34,8 +34,10 @@ function filterLines(query) {
     $("#log div").show();
   } else {
     $("#clear_filter").show();
+
+    query = query.toLowerCase();
     $("#log div").each(function() {
-      if(this.textContent.indexOf(query) != -1) {
+      if(this.textContent.toLowerCase().indexOf(query) != -1) {
         $(this).show();
       } else {
         $(this).hide();
