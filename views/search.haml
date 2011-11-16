@@ -1,0 +1,5 @@
+%section#log
+  = haml :_messages, locals: { :messages => @messages, :dates => true }
+
+  - if @messages.empty?
+    No messages are found.

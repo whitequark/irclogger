@@ -1,0 +1,153 @@
+$header_height: 0
+$channels_width: 165px
+
+$active_color: #fff
+$passive_color: #888
+$inactive_color: #444
+$border_color: #444
+$link_color: #f6f840
+$nick_color: #fb1263
+
+body
+  background-color: #000
+  font-size: 12px
+  line-height: 16px
+  color: #fff
+  margin: 0
+  padding: 0
+
+section, header, pre
+  display: block
+  margin: 0
+
+body, pre, input
+  font-family: "Menlo", "Monaco", monospace
+
+a
+  color: #fff
+
+input
+  border: 1px solid $border_color
+  background-color: #111
+  color: #fff
+  outline: none
+  height: 13px
+  font-size: 12px
+  padding-top: 2px
+  margin: 0
+
+  &[type="submit"]
+    margin-top: 5px
+    height: 18px
+    align: center
+
+.clear-input
+  display: inline-block
+  position: relative
+  left: -22px
+  top: 3px
+  width: 12px
+  height: 12px
+  background: no-repeat url(/images/clear.png)
+  &:hover
+    background-position: -12px 0
+
+header
+  background-color: #000
+  height: $header_height
+  line-height: $header_height
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  text-align: center
+  border-bottom: 1px solid $inactive_color
+
+  a
+    text-decoration: none
+    color: #555
+
+  span
+    position: absolute
+    left: 10px
+    top: 0
+    font-size: 18px
+
+#channels
+  position: fixed
+  width: $channels_width
+  top: $header_height
+  height: 100%
+  border-right: 1px solid $border_color
+
+  ul
+    list-style-type: none
+    margin: 0
+    padding: 10px
+    border-top: 1px solid $border_color
+
+    a
+      color: $passive_color
+      text-decoration: none
+
+    li.current
+      a
+        color: $active_color
+
+#options
+  border-top: 1px solid $inactive_color
+  padding: 10px
+
+  #clear_selection
+    color: $inactive_color
+    &.active
+      color: $active_color
+
+  #search-box
+    margin-top: 10px
+    width: $channels_width - 20px
+
+#calendar
+  color: #555
+  padding: 10px
+
+  a
+    text-decoration: none
+    color: #fff
+
+    &.current
+      text-decoration: underline
+
+#log-panel
+  color: $passive_color
+  border-bottom: 1px solid $border_color
+  margin: 0 0 5px 0
+  padding: 0 0 5px 0
+
+#log
+  padding: 10px
+  margin: $header_height 0 0 ($channels_width + 1px)
+  color: $passive_color
+
+  a.link
+    color: $passive_color
+
+  a.timestamp
+    color: $inactive_color !important
+    text-decoration: none
+
+    &:hover
+      text-decoration: underline
+
+#log:not(.highlight) div, div.highlight
+  &.talk
+    color: $active_color
+
+  a.link
+    color: $link_color !important
+
+  span.nickname
+    color: $nick_color
+
+div.highlight
+  color: $active_color

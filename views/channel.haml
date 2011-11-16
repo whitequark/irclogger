@@ -1,0 +1,10 @@
+%section#log
+  %aside#log-panel
+    Filter:
+    %input#filter
+    %span.clear-input#clear_filter{:style => 'display:none'}
+
+  = haml :_messages, locals: { :messages => @messages, :dates => false }
+
+  - if @messages.empty?
+    There are no messages recorded for #{params[:date]}.

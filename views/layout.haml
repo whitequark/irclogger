@@ -1,0 +1,38 @@
+!!! 5
+
+%html
+  %title
+    - if @channel
+      = "#{@channel} on #{@date} – "
+    irc logs at whitequark.org
+
+  %meta{:charset => "utf-8"}
+  %link{:rel => "stylesheet", :href => "/style.css"}
+
+  %script{:src => "https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"}
+  %script{:src => "/jquery.ba-hashchange.min.js"}
+  %script{:src => "/application.js"}
+
+  %body
+    %section#channels
+      %section#calendar
+        %pre= calendar(@channel, @date, !@channel.nil?)
+
+      - if @channel
+        %section#options
+          %a{:href => '#', :id => 'clear_selection'}> Clear selection
+          %form{:action => "/#{channel @channel}/search"}
+            %input{:placeholder => 'Enter keywords', :id => 'search-box', :name => 'q', :value => params[:q]}
+            %input{:type => 'submit', :value => 'Search'}
+
+      %ul
+        %li{:class => "#{"current" unless @channel}"}
+          %a{:href => '/'} Console
+
+        - @channels.each do |channel|
+          %li{:class => "#{"current" if channel == @channel}"}
+            %a{:href => "/#{channel(channel)}/#{@date}"}= channel
+
+    = yield
+
+    = erb :_analytics
