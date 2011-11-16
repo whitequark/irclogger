@@ -11,13 +11,19 @@ class Message < Sequel::Model(:irclog)
   def type
     if talk?
       "talk"
+    elsif me_tell?
+      "me-tell"
     elsif info?
       "info"
     end
   end
 
+  def me_tell?
+    nick[0] == '*'
+  end
+
   def talk?
-    !nick.empty?
+    !nick.empty? && !me_tell?
   end
 
   def info?

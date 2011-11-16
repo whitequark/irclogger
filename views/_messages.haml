@@ -11,6 +11,10 @@
 
         = auto_link_urls(escape_html message.line)
 
+      - elsif message.me_tell?
+        = message.nick
+        = message.line
+
       - else
         = message.line
 
