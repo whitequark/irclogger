@@ -40,7 +40,9 @@ use Data::Dumper;
     sub said {
         my $self = shift;
         my $e = shift;
-        dbwrite($e->{channel}, $e->{who}, $e->{body});
+        if($e->{body} !~ /\[off\]/) {
+          dbwrite($e->{channel}, $e->{who}, $e->{body});
+        }
         return undef;
     }
 
@@ -69,7 +71,7 @@ use Data::Dumper;
     sub topic {
         my $self = shift;
         my $e = shift;
-        dbwrite($e->{channel}, "", 'Topic for ' . $e->{channel} . 'is now ' . $e->{topic});
+        dbwrite($e->{channel}, "", 'Topic for ' . $e->{channel} . ' is now ' . $e->{topic});
         return undef;
     }
 
