@@ -1,11 +1,8 @@
 %div{:class => "log-messages #{'with-panel' if panel}"}
   - messages.each do |message|
     %div{:class => "#{message.type}"}
-      %a{:href => "##{message.timestamp}", :class => 'timestamp', :id => "#{message.timestamp}"}
-        - if dates
-          = Time.at(message.timestamp).strftime("%Y-%m-%d %H:%M")
-        - else
-          = Time.at(message.timestamp).strftime("%H:%M")
+      %a{:href => "##{message.timestamp}", :class => 'timestamp', :id => "#{message.timestamp}"}>= Time.at(message.timestamp).strftime("#{'%Y-%m-%d ' if dates}%H:%M")
+      \ 
 
       - if message.talk?
         &lt;
