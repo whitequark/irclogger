@@ -3,7 +3,10 @@
 %html
   %title
     - if @channel
-      = "#{@channel} on #{@date} – "
+      = @channel
+      - if @date
+        = " on #{@date}"
+      = " — "
     irc logs at whitequark.org
 
   %meta{:charset => "utf-8"}
