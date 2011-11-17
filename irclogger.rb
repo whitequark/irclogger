@@ -92,7 +92,8 @@ helpers do
 
   def calendar(channel, date=nil, links=true)
     origin = date || Date.today
-    cal = `cal #{origin.month} #{origin.year}`.split("\n")[1..-1].join("\n")
+    cal = `cal #{origin.month} #{origin.year}`.split("\n")
+    cal = "<span class='header'>#{cal[1]}</span>\n" + cal[2..-1].join("\n")
 
     if links
       cal.gsub!(/\b(\d{1,2})\b/) do
@@ -110,13 +111,14 @@ helpers do
     next_date = origin >> 1
     prev_date = origin << 1
 
+    header = "<span class='header'>#{origin.strftime("%B %Y").center(18)}</span>"
     if links
       %Q{<a href="/#{channel channel}/#{prev_date}">&lt;</a>} +
-        origin.strftime("%B %Y").center(18) +
+         header +
         %Q{<a href="/#{channel channel}/#{next_date}">&gt;</a>\n} +
         cal
     else
-      %Q{&lt;#{origin.strftime("%B %Y").center(18)}&gt;\n#{cal}}
+      %Q{&lt;#{header}&gt;\n#{cal}}
     end
   end
 end
