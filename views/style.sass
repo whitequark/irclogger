@@ -1,3 +1,5 @@
+@charset "utf-8"
+
 $header_height: 0
 $channels_width: 165px
 
@@ -163,8 +165,12 @@ header
   a.link
     color: $link_color !important
 
-  span.nickname
+  .nickname
     color: $nick_color
+
+  .chain:before
+    content: "↑"
+    color: $link_color
 
 div.highlight
   color: $active_color

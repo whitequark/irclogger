@@ -28,6 +28,19 @@ function highlightLines(range) {
   })
 }
 
+function highlightChain(id) {
+  prepareHighlight();
+
+  while(true) {
+    var elems = $("#log [data-group='" + id + "']");
+    elems.addClass("highlight");
+
+    var attr = elems[0].attributes.getNamedItem('data-previous_group');
+    if(!attr) break;
+    id = attr.value;
+  }
+}
+
 function filterLines(query) {
   if(query == null || query == "") {
     $("#clear_filter").hide();
@@ -125,6 +138,7 @@ $(document).ready(function() {
 
   $("#clear_selection").click(function() {
     setHash("");
+    clearHighlight();
 
     return false;
   });
@@ -136,5 +150,9 @@ $(document).ready(function() {
   $("#clear_filter").click(function() {
     setHash(null, "");
     $("#filter").val("");
+  });
+
+  $(".chain").click(function() {
+    highlightChain(this.parentElement.attributes.getNamedItem('data-group').value);
   });
 });

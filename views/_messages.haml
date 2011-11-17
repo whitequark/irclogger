@@ -1,6 +1,6 @@
 %div{:class => "log-messages #{'with-panel' if panel}"}
   - messages.each do |message|
-    %div{:class => "#{message.type}"}
+    %div{:class => message.type, :data => message.data}
       - time = Time.at(message.timestamp)
       - if dates
         %a.timeref{:href => "/#{channel @channel}/#{time.to_date}##{message.timestamp}"}= time.strftime("%Y-%m-%d %H:%M")
@@ -14,6 +14,6 @@
       - elsif message.me_tell?
         = message.nick
 
-      = format_message(escape_html message.line)
+      = format_message(escape_html(message.line), @nicks)
 
       %br

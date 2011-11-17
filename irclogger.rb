@@ -8,6 +8,8 @@ require 'sinatra'
 DB = Sequel.connect 'mysql2://irc:Z3VxBPe3XQSj4QTmw3@localhost/irclogs'
 
 class Message < Sequel::Model(:irclog)
+  attr_accessor :data
+
   def type
     if talk?
       "talk"
@@ -28,6 +30,37 @@ class Message < Sequel::Model(:irclog)
 
   def info?
     nick.empty?
+  end
+
+  def self.nicks(messages)
+    messages.filter('nick != ""').map(:nick)
+  end
+
+  def self.track_chains(messages)
+    groups, group_nicks, last = {}, {}, {}
+    last_group_id, group_id, current_nick = 0, nil, nil
+    prev_group_id = nil
+
+    nicks = nicks(messages)
+    messages.to_a.select(&:talk?).each do |m|
+      nick = nicks.find { |n| m.line.start_with? n }
+      if nick || (m.nick != current_nick) || group_id.nil?
+        current_nick = m.nick
+        if nick && group_nicks[groups[m.nick]] == nick &&
+            (!last[nick] || !last[m.nick] || last[m.nick].timestamp > last[nick].timestamp)
+          group_id = groups[m.nick]
+          prev_group_id = groups[nick]
+        else
+          group_id = (last_group_id += 1)
+          prev_group_id = groups[nick]
+          groups[m.nick] = group_id
+          group_nicks[group_id] = nick
+        end
+      end
+
+      m.data = { :group => group_id, :previous_group => prev_group_id }
+      last[m.nick] = m
+    end
   end
 
   def self.find_by_channel_and_date(channel, date)
@@ -75,7 +108,7 @@ helpers do
       ([[:punct:]]|<|$|)       # trailing text
     }xi
 
-  def format_message(text)
+  def format_message(text, nicks=nil)
     text.gsub('&#x2F;', '/').gsub(AUTO_LINK_REGEXP) do
       all, a, b, c, d = $&, $1, $2, $3, $4
       if a =~ /<a\s/i # don't replace URL's that are already linked
@@ -86,7 +119,14 @@ helpers do
       end
     end.
       gsub(/(^|\s)(\*[^\s].+?[^\s]\*)(\s|$)/, '\1<b>\2</b>\3').
-      gsub(/(^|\s)(_[^\s].+?[^\s]_)(\s|$)/, '\1<u>\2</u>\3')
+      gsub(/(^|\s)(_[^\s].+?[^\s]_)(\s|$)/, '\1<u>\2</u>\3').
+      gsub(/^([A-Za-z_0-9-]+)/) do
+        if nicks && nicks.include?($1)
+          "<span class='chain'>#$1</span>"
+        else
+          $&
+        end
+      end
   end
 
   def calendar(channel, date=nil, links=true)
@@ -157,7 +197,10 @@ get '/:channel/:date?' do
   @channel = "##{params[:channel].gsub '.', '#'}"
   if params[:date]
     @date = Date.parse(params[:date])
-    @messages = Message.find_by_channel_and_date(@channel, @date)
+
+    dataset = Message.find_by_channel_and_date(@channel, @date)
+    @messages = Message.track_chains(dataset)
+    @nicks = Message.nicks(dataset)
 
     haml :channel
   else
