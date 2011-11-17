@@ -28,7 +28,7 @@ sub get_dbh {
 
     my $db_dsn = "DBI:$dbs:database=$db_name;host=$host";
     my $dbh = DBI->connect($db_dsn, $user, $passwd,
-            {RaiseError=>1, AutoCommit => 1});
+            {RaiseError=>1, AutoCommit => 1, mysql_enable_utf8 => 1});
     return $dbh;
 }
 
