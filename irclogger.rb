@@ -75,19 +75,18 @@ helpers do
       ([[:punct:]]|<|$|)       # trailing text
     }xi
 
-  # Turns all urls into clickable links.  If a block is given, each url
-  # is yielded and the result is used as the link text.
-  def auto_link_urls(text)
+  def format_message(text)
     text.gsub('&#x2F;', '/').gsub(AUTO_LINK_REGEXP) do
       all, a, b, c, d = $&, $1, $2, $3, $4
       if a =~ /<a\s/i # don't replace URL's that are already linked
         all
       else
         text = b + c
-        text = yield(text) if block_given?
         %(#{a}<a href="#{text}" class="link" target="_blank">#{text}</a>#{d})
       end
-    end
+    end.
+      gsub(/(^|\s)(\*[^\s].+?[^\s]\*)(\s|$)/, '\1<b>\2</b>\3').
+      gsub(/(^|\s)(_[^\s].+?[^\s]_)(\s|$)/, '\1<u>\2</u>\3')
   end
 
   def calendar(channel, date=nil, links=true)

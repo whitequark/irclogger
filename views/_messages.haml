@@ -14,6 +14,6 @@
       - elsif message.me_tell?
         = message.nick
 
-      = auto_link_urls(escape_html message.line)
+      = format_message(escape_html message.line)
 
       %br
