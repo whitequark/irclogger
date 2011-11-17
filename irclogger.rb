@@ -47,7 +47,11 @@ class Message < Sequel::Model(:irclog)
       nick = nicks.find { |n| m.line.start_with? n }
       if nick || (m.nick != current_nick) || group_id.nil?
         current_nick = m.nick
-        last_refs[nick] = m.nick
+
+        if nick
+          last_refs[m.nick] = nil
+          last_refs[nick] = m.nick
+        end
 
         last_ref = last[last_refs[m.nick]]
         if last_ref && last_ref.line.start_with?(m.nick)
@@ -128,7 +132,7 @@ helpers do
     end.
       gsub(/(^|\s)(\*[^\s].+?[^\s]\*)(\s|$)/, '\1<b>\2</b>\3').
       gsub(/(^|\s)(_[^\s].+?[^\s]_)(\s|$)/, '\1<u>\2</u>\3').
-      gsub(/^([A-Za-z_0-9-]+)/) do
+      gsub(/^([A-Za-z_0-9|.-]+)/) do
         if nicks && nicks.include?($1)
           "<span class='chain'>#$1</span>"
         else

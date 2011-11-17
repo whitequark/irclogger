@@ -36,7 +36,7 @@ function highlightChain(id) {
     elems.addClass("highlight");
 
     var attr = elems[0].attributes.getNamedItem('data-previous_group');
-    if(!attr) break;
+    if(!attr) return elems[0];
     id = attr.value;
   }
 }
@@ -70,13 +70,16 @@ function update(initial) {
       prepareHighlight();
 
       var anchors = selection.split("-");
-      highlightLines(anchors);
-
-      if(initial && anchors && anchors.length > 0) {
-        var elem = $("#" + anchors[0])[0];
-        if(elem)
-          elem.scrollIntoView();
+      if(anchors[1] == 'chain') {
+        var elem = highlightChain($("#" + anchors[0]).parent()[0].attributes.getNamedItem('data-group').value);
+      } else {
+        if(anchors && anchors.length > 0)
+          var elem = $("#" + anchors[0])[0];
+        highlightLines(anchors);
       }
+
+      if(elem && initial)
+        elem.scrollIntoView();
     }
   }
 
@@ -98,7 +101,7 @@ function setHash(selection, filter) {
 
   var newHash = (currentSelection || '') + ';' + (currentFilter || '');
 
-  var elems = $("[id='" + currentSelection + "']");
+  var elems = $("[id='" + newHash + "']");
   elems.attr('id', ''); 
   window.location.hash = '#' + newHash;
   elems.attr('id', currentSelection);
@@ -153,6 +156,6 @@ $(document).ready(function() {
   });
 
   $(".chain").click(function() {
-    highlightChain(this.parentElement.attributes.getNamedItem('data-group').value);
+     setHash($(this).parent().find('.timestamp')[0].id + "-chain");
   });
 });
