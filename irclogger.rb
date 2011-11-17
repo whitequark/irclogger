@@ -40,19 +40,27 @@ class Message < Sequel::Model(:irclog)
     groups, group_nicks, last = {}, {}, {}
     last_group_id, group_id, current_nick = 0, nil, nil
     prev_group_id = nil
+    last_refs = {}
 
     nicks = nicks(messages)
     messages.to_a.select(&:talk?).each do |m|
       nick = nicks.find { |n| m.line.start_with? n }
       if nick || (m.nick != current_nick) || group_id.nil?
         current_nick = m.nick
+        last_refs[nick] = m.nick
+
+        last_ref = last[last_refs[m.nick]]
+        if last_ref && last_ref.line.start_with?(m.nick)
+          prev_group_id = groups[nick] || last_ref.data[:group]
+        else
+          prev_group_id = groups[nick]
+        end
+
         if nick && group_nicks[groups[m.nick]] == nick &&
             (!last[nick] || !last[m.nick] || last[m.nick].timestamp > last[nick].timestamp)
           group_id = groups[m.nick]
-          prev_group_id = groups[nick]
         else
           group_id = (last_group_id += 1)
-          prev_group_id = groups[nick]
           groups[m.nick] = group_id
           group_nicks[group_id] = nick
         end
