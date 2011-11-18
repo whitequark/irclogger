@@ -1,20 +1,24 @@
-- now = Time.now.strftime("%H:%M")
+- now = Time.now.gmtime.strftime("%H:%M")
 
 #log
 
-  .info
-    = now
+  .talk
+    %a.timestamp= now
     This is <a href="mailto:whitequark@whitequark.org">whitequark</a>'s IRC log viewer inspired by
     <a href="http://github.com/cschneid">Chris Schneider</a>'s <a href="http://irclogger.com">irclogger.com</a>.
 
-  .info
-    = now
+  .talk
+    %a.timestamp= now
     The application works on Sinatra, and its source code is available on <a href="http://github.com/whitequark/irclogger">Github</a>.
 
-  .info
-    = now
+  .talk
+    %a.timestamp= now
+    All timestamps are in UTC.
+
+  .talk
+    %a.timestamp= now
     You can select bookmarkable message ranges by holding Shift and clicking on timestamp.
 
-  .info
-    = now
+  .talk
+    %a.timestamp= now
     When there is a yellow arrow to the left of nick, you can click on it to highlight the chain of replies.

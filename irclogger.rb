@@ -81,8 +81,8 @@ class Message < Sequel::Model(:irclog)
     day_after = date + 1
 
     filter('timestamp > ? and timestamp < ?',
-                  Time.local(date.year, date.month, date.day).to_i,
-                  Time.local(day_after.year, day_after.month, day_after.day).to_i).
+                  Time.utc(date.year, date.month, date.day).to_i,
+                  Time.utc(day_after.year, day_after.month, day_after.day).to_i).
       filter(:channel => channel).
       order(:timestamp)
   end
@@ -138,7 +138,7 @@ helpers do
     end.
       gsub(/(^|\s)(\*[^\s].+?[^\s]\*)(\s|$)/, '\1<b>\2</b>\3').
       gsub(/(^|\s)(_[^\s].+?[^\s]_)(\s|$)/, '\1<u>\2</u>\3').
-      gsub(/^([A-Za-z_0-9|.-]+)/) do
+      gsub(/^([A-Za-z_0-9|.`-]+)/) do
         if nicks && nicks.include?($1)
           "<span class='chain'>#$1</span>"
         else
