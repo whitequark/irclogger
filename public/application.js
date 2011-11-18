@@ -1,12 +1,12 @@
 function prepareHighlight() {
   $('#log').addClass("highlight");
-  $("#log div").removeClass("highlight");
+  $("#log div.highlight").removeClass("highlight");
   $('#clear_selection').addClass("active");
 }
 
 function clearHighlight() {
   $('#log').removeClass("highlight");
-  $("#log div").removeClass("highlight");
+  $("#log div.highlight").removeClass("highlight");
   $('#clear_selection').removeClass("active");
 }
 
@@ -146,13 +146,27 @@ $(document).ready(function() {
     return false;
   });
 
+  var filterTimeout = null;
   $("#filter").keyup(function() {
-    setHash(null, this.value);
+    var $this = this;
+
+    clearTimeout(filterTimeout);
+    filterTimeout = setTimeout(function() {
+      setHash(null, $this.value);
+    }, 500);
   });
 
   $("#clear_filter").click(function() {
+    var highlightedElem = $("#log div.highlight:first")[0];
+
     setHash(null, "");
     $("#filter").val("");
+
+    if(highlightedElem) {
+      setTimeout(function() {
+        highlightedElem.scrollIntoView();
+      }, 200);
+    }
   });
 
   $(".chain").click(function() {
