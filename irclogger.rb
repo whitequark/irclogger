@@ -87,6 +87,10 @@ class Message < Sequel::Model(:irclog)
       order(:timestamp)
   end
 
+  def self.check_by_channel_and_date(channel, date)
+    find_by_channel_and_date(channel, date).filter('nick != ""').any?
+  end
+
   def self.find_by_channel_and_fulltext(channel, query)
     filter(:channel => channel).
       filter('(nick like ? or line like ?)', "%#{query}%", "%#{query}%").
@@ -153,7 +157,7 @@ helpers do
         d = origin.strftime("%Y-%m-#{$1.rjust 2, "0"}")
         current = "current" if date && date.to_s == d
 
-        if Message.find_by_channel_and_date(channel, Date.parse(d)).any?
+        if Message.check_by_channel_and_date(channel, Date.parse(d))
           %Q{<a class="#{current}" href="/#{channel channel}/#{d}">#{$1}</a>}
         else
           $1
