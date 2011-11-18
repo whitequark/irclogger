@@ -43,7 +43,9 @@ class Message < Sequel::Model(:irclog)
     last_refs = {}
 
     nicks = nicks(messages)
-    messages.to_a.select(&:talk?).each do |m|
+    messages.to_a.each do |m|
+      next unless m.talk?
+
       nick = nicks.find { |n| m.line.start_with? n }
       if nick || (m.nick != current_nick) || group_id.nil?
         current_nick = m.nick

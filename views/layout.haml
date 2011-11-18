@@ -38,7 +38,7 @@
 
         - @channels.each do |channel|
           %li{:class => "#{"current" if channel == @channel}"}
-            %a{:href => "/#{channel(channel)}/#{@date}"}= channel
+            %a{:href => "/#{channel(channel)}"}= channel
 
     = yield
 

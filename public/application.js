@@ -71,7 +71,7 @@ function update(initial) {
 
       var anchors = selection.split("-");
       if(anchors[1] == 'chain') {
-        var elem = highlightChain($("#" + anchors[0]).parent()[0].attributes.getNamedItem('data-group').value);
+        var elem = highlightChain($("[id='" + anchors[0] + "']:last").parent()[0].attributes.getNamedItem('data-group').value);
       } else {
         if(anchors && anchors.length > 0)
           var elem = $("#" + anchors[0])[0];
