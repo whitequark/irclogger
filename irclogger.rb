@@ -136,8 +136,8 @@ helpers do
         %(#{a}<a href="#{text}" class="link" target="_blank">#{text}</a>#{d})
       end
     end.
-      gsub(/(^|\s)(\*[^\s].+?[^\s]\*)(\s|$)/, '\1<b>\2</b>\3').
-      gsub(/(^|\s)(_[^\s].+?[^\s]_)(\s|$)/, '\1<u>\2</u>\3').
+      gsub(/(^|\s)(\*[^\s](?:|.*?[^\s])\*)(\s|$)/, '\1<b>\2</b>\3').
+      gsub(/(^|\s)(_[^\s](?:|.*?[^\s])_)(\s|$)/, '\1<u>\2</u>\3').
       gsub(/^([A-Za-z_0-9|.`-]+)/) do
         if nicks && nicks.include?($1)
           "<span class='chain'>#$1</span>"
