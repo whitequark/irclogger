@@ -222,6 +222,6 @@ get '/:channel/:date?' do
 
     haml :channel
   else
-    redirect "/#{params[:channel]}/#{Date.today}"
+    redirect "/#{params[:channel]}/#{Time.now.gmtime.to_date}"
   end
 end
