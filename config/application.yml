@@ -1,0 +1,2 @@
+---
+database: mysql2://root@localhost/irclogs

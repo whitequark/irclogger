@@ -1,8 +1,8 @@
 ---
 chdir: /var/www/irclog.whitequark.org/
 environment: production
-pid: tmp/irclogger.pid
-rackup: config.ru
-log: log/irclogger.log
+pid: tmp/viewer.pid
+rackup: config/viewer.ru
+log: log/viewer.log
 socket: /tmp/irclogger.sock
 daemonize: true
