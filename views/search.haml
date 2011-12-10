@@ -1,7 +1,15 @@
 %section#log
-  - if @over_limit
-    There were more than #{@limit} matching messages. Only first #{@limit} are shown.
+  - if @message_count > @limit
+    .pagination
+      Pages:
+      - 1.upto(@message_count / @limit) do |page|
+        - if page == (params[:page] || 1).to_i
+          %span.current= page
+        - else
+          %a{:href => "/#{params[:channel]}/search?q=#{params[:q]}&page=#{page}"}= page
+
     = haml :_messages, locals: { :messages => @messages, :dates => true, :panel => true }
+
   - elsif @messages
     = haml :_messages, locals: { :messages => @messages, :dates => true, :panel => false }
 

@@ -112,10 +112,8 @@ get '/:channel/search' do
 
   if params[:q].length >= 3
     @messages = Message.find_by_channel_and_fulltext(@channel, params[:q])
-    if @messages.count > @limit
-      @messages = @messages.limit(@limit)
-      @over_limit = true
-    end
+    @message_count = @messages.count
+    @messages = @messages.limit(@limit, ((params[:page] || 1).to_i - 1) * @limit)
   end
 
   haml :search
@@ -123,6 +121,7 @@ end
 
 get '/:channel/:date?' do
   @channel = "##{params[:channel].gsub '.', '#'}"
+
   if params[:date]
     @date = Date.parse(params[:date])
 
