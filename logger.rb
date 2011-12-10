@@ -67,11 +67,13 @@ def go!
   sleep 1 until irc.dead_socket
 end
 
+logfile = File.join(File.dirname(__FILE__), 'log', 'logger.log')
+STDIN.close
+STDERR.reopen(logfile)
+STDOUT.reopen(logfile)
+
 begin
   go!
 rescue StandardError => e
-  puts "#{e.class}: #{e.message}"
-  e.backtrace.each { |line| puts "  #{line}" }
-
   exec __FILE__
 end
