@@ -1,17 +1,19 @@
 %section#log
-  - if @message_count > @limit
-    .pagination
-      Pages:
-      - 1.upto(@message_count / @limit) do |page|
-        - if page == (params[:page] || 1).to_i
-          %span.current= page
-        - else
-          %a{:href => "/#{params[:channel]}/search?q=#{params[:q]}&page=#{page}"}= page
+  %aside#log_panel
+    Found
+    = @message_count
+    results.
 
-    = haml :_messages, locals: { :messages => @messages, :dates => true, :panel => true }
+    - if @message_count > @limit
+      %span.pagination
+        Pages:
+        - 1.upto(@message_count / @limit) do |page|
+          - if page == (params[:page] || 1).to_i
+            %span.current= page
+          - else
+            %a{:href => "/#{params[:channel]}/search?q=#{params[:q]}&page=#{page}"}= page
 
-  - elsif @messages
-    = haml :_messages, locals: { :messages => @messages, :dates => true, :panel => false }
+  = haml :_messages, locals: { :messages => @messages, :dates => true }
 
   - if @messages.nil? || @messages.empty?
     - if params[:q].length < 3
