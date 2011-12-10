@@ -83,8 +83,7 @@ class Message < Sequel::Model(:irclog)
   end
 
   def self.find_by_channel_and_fulltext(channel, query)
-    filter(:channel => channel).
-      filter('(nick like ? or line like ?)', "%#{query}%", "%#{query}%").
-      order(:timestamp)
+    order(:timestamp).filter(:channel => channel).
+           filter('match (nick, line) against (? in boolean mode)', query)
   end
 end

@@ -9,3 +9,4 @@ CREATE TABLE `irclog` (
 ) CHARSET=utf8;
 
 CREATE INDEX `irclog_timestamp_index` ON `irclog` (timestamp);
+CREATE FULLTEXT INDEX `irclog_fulltext_index` ON `irclog` (nick, line);
