@@ -31,6 +31,8 @@
           %form{:action => "/#{channel @channel}/search"}
             %input{:placeholder => 'Enter keywords', :id => 'search-box', :name => 'q', :value => params[:q]}
             %input{:type => 'submit', :value => 'Search'}
+            %a{:href => 'http://dev.mysql.com/doc/refman/5.5/en/fulltext-boolean.html', :target => '_blank'}
+              ?
 
       %ul
         %li{:class => "#{"current" unless @channel}"}
