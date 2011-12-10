@@ -67,13 +67,11 @@ def go!
   sleep 1 until irc.dead_socket
 end
 
-loop do
-  begin
-    go!
-  rescue StandardError => e
-    puts "#{e.class}: #{e.message}"
-    e.backtrace.each { |line| puts "  #{line}" }
-  end
+begin
+  go!
+rescue StandardError => e
+  puts "#{e.class}: #{e.message}"
+  e.backtrace.each { |line| puts "  #{line}" }
 
-  sleep 1
+  exec __FILE__
 end
