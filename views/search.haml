@@ -7,7 +7,7 @@
     - if @message_count > @limit
       %span.pagination
         Pages:
-        - 1.upto(@message_count / @limit) do |page|
+        - 1.upto(@message_count / @limit + 1) do |page|
           - if page == (params[:page] || 1).to_i
             %span.current= page
           - else
