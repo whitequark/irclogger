@@ -28,10 +28,10 @@ helpers do
         (?:\.[-\w]+)*            # remaining subdomains or domain
         (?::\d+)?                # port
         (?:/(?:(?:[~\w\+@%=\(\)-]|(?:[,.;:'][^\s$])))*)* # path
-        (?:\?[\w\+@%&=.;-]+)?     # query string
+        (?:\?[\w\+@%&=.;-]+)?    # query string
         (?:\#[\w\-]*)?           # trailing anchor
       )
-      ([[:punct:]]|<|$|)       # trailing text
+      ([[:punct:]]|<|$|)         # trailing text
     }xi
 
   def format_message(text, nicks=nil)
@@ -57,8 +57,10 @@ helpers do
 
   def calendar(channel, date=nil, links=true)
     origin = date || Date.today
+
     cal = `cal #{origin.month} #{origin.year}`.split("\n")
     cal = "<span class='header'>#{cal[1]}</span>\n" + cal[2..-1].join("\n")
+    cal.gsub!("_\b", '')
 
     if links
       cal.gsub!(/\b(\d{1,2})\b/) do

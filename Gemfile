@@ -8,3 +8,5 @@ gem 'sequel'
 gem 'mysql2'
 
 gem 'thin'
+
+gem 'net-yail'

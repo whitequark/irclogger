@@ -12,19 +12,19 @@ class Message < Sequel::Model(:irclog)
   end
 
   def me_tell?
-    nick[0] == '*'
+    nick && nick[0] == '*'
   end
 
   def talk?
-    !nick.empty? && !me_tell?
+    !info? && !me_tell?
   end
 
   def info?
-    nick.empty?
+    nick.nil?
   end
 
   def self.nicks(messages)
-    messages.filter('nick != ""').map(:nick)
+    messages.filter('nick is not null').map(:nick)
   end
 
   def self.track_chains(messages)
