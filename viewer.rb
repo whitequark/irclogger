@@ -59,7 +59,7 @@ helpers do
     origin = date || Date.today
 
     cal = `cal #{origin.month} #{origin.year}`.split("\n")
-    cal = "<span class='header'>#{cal[1]}</span>\n" + cal[2..-1].join("\n")
+    cal = "\n<span class='header'>#{cal[1]}</span>\n" + cal[2..-1].join("\n")
     cal.gsub!("_\b", '')
 
     if links
@@ -79,17 +79,18 @@ helpers do
     prev_date = origin << 1
 
     header = "<span class='header'>#{origin.strftime("%B %Y").center(18)}</span>"
-    nofollow = %{rel="noindex nofollow"}
     if links
-      follow_prev = Message.check_by_channel_and_month(channel, prev_date)
-      follow_next = Message.check_by_channel_and_month(channel, next_date)
+      link_if = ->(date, text) do
+        if Message.check_by_channel_and_month(channel, prev_date)
+          %Q{<a href="/#{channel channel}/#{prev_date}">#{text}</a>}
+        else
+          text
+        end
+      end
 
-      %Q{<a href="/#{channel channel}/#{prev_date}" #{nofollow unless follow_prev}>&lt;</a>} +
-        header +
-        %Q{<a href="/#{channel channel}/#{next_date}" #{nofollow unless follow_next}>&gt;</a>\n} +
-        cal
+      link_if.(prev_date, '&lt;') + header + link_if.(next_date, '&gt;') + cal
     else
-      %Q{&lt;#{header}&gt;\n#{cal}}
+      %Q{&lt;#{header}&gt;#{cal}}
     end
   end
 end
