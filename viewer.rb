@@ -79,10 +79,14 @@ helpers do
     prev_date = origin << 1
 
     header = "<span class='header'>#{origin.strftime("%B %Y").center(18)}</span>"
+    nofollow = %{rel="noindex nofollow"}
     if links
-      %Q{<a href="/#{channel channel}/#{prev_date}">&lt;</a>} +
-         header +
-        %Q{<a href="/#{channel channel}/#{next_date}">&gt;</a>\n} +
+      follow_prev = Message.check_by_channel_and_month(channel, prev_date)
+      follow_next = Message.check_by_channel_and_month(channel, next_date)
+
+      %Q{<a href="/#{channel channel}/#{prev_date}" #{nofollow unless follow_prev}>&lt;</a>} +
+        header +
+        %Q{<a href="/#{channel channel}/#{next_date}" #{nofollow unless follow_next}>&gt;</a>\n} +
         cal
     else
       %Q{&lt;#{header}&gt;\n#{cal}}
