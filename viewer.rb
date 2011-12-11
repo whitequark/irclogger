@@ -81,8 +81,8 @@ helpers do
     header = "<span class='header'>#{origin.strftime("%B %Y").center(18)}</span>"
     if links
       link_if = ->(date, text) do
-        if Message.check_by_channel_and_month(channel, prev_date)
-          %Q{<a href="/#{channel channel}/#{prev_date}">#{text}</a>}
+        if Message.check_by_channel_and_month(channel, date)
+          %Q{<a href="/#{channel channel}/#{date}">#{text}</a>}
         else
           text
         end
