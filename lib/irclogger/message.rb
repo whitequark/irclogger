@@ -79,11 +79,11 @@ class Message < Sequel::Model(:irclog)
   end
 
   def self.check_by_channel_and_date(channel, date)
-    find_by_channel_and_date(channel, date).filter('nick != ""').any?
+    find_by_channel_and_date(channel, date).filter('nick is not null').any?
   end
 
   def self.find_by_channel_and_fulltext(channel, query)
-    order(:timestamp).filter(:channel => channel).
+    order(:timestamp).filter(:channel => channel).filter('nick is not null').
            filter('match (nick, line) against (? in boolean mode)', query)
   end
 end
