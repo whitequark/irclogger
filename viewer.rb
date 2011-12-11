@@ -29,7 +29,7 @@ helpers do
         (?::\d+)?                # port
         (?:/(?:(?:[~\w\+@%=\(\)-]|(?:[,.;:'][^\s$])))*)* # path
         (?:\?[\w\+@%&=.;-]+)?    # query string
-        (?:\#[\w\-]*)?           # trailing anchor
+        (?:\#[\w\-!:/]*)?        # trailing anchor
       )
       ([[:punct:]]|<|$|)         # trailing text
     }xi
