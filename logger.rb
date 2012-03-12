@@ -12,23 +12,30 @@ Thread.abort_on_exception = true
 def log(type, event, what=nil)
   case type
     when :system
-      Message.create(:channel => event.channel, :timestamp => Time.now,
-                      :line => what)
+      Message.create(:channel => event.channel, 
+                     :timestamp => Time.now,
+                     :line => what)
     when :message
-      Message.create(:channel => event.channel, :timestamp => Time.now,
-                      :nick => event.nick, :line => event.message)
+      Message.create(:channel => event.channel, 
+                     :timestamp => Time.now,
+                     :nick => event.nick, 
+                     :line => event.message)
     when :action
-      Message.create(:channel => event.channel, :timestamp => Time.now,
-                      :nick => "* #{event.nick}", :line => event.message)
+      Message.create(:channel => event.channel, 
+                     :timestamp => Time.now,
+                     :nick => "* #{event.nick}", 
+                     :line => event.message)
   end
 end
 
 def go!
   irc = Net::YAIL.new(
     :address   => Config['server'],
+	:port      => Config['port'],
+    :use_ssl   => Config['use_ssl'],
     :username  => Config['username'],
     :realname  => Config['realname'],
-    :nicknames => ["", *10.times.to_a].map { |n| Config['nickname'] + n.to_s }
+    :nicknames  => ["", *10.times.to_a].map { |n| Config['nickname'] + n.to_s }
   )
 
   error = false
@@ -67,8 +74,13 @@ def go!
     error = true
   end
 
+# reply on any ctcp with version.
+  irc.on_ctcp { |e| 
+    irc.ctcpreply(e.nick,"VERSION Logger");
+  }
+  
   irc.start_listening
-
+  
   trap("INT")  { exit }
   trap("QUIT") { exit }
 

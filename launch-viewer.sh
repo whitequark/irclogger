@@ -1,7 +1,7 @@
 #!/bin/bash
 
-. "$HOME/.rvm/scripts/rvm"
+# if you want to use RVM, uncomment this
+#. "$HOME/.rvm/scripts/rvm"
+#rvm use 1.9.3
 
-rvm use 1.9.3
-
-thin -C /var/www/irclog.whitequark.org/config/thin.yml start
+thin -C /home/rz2k/irclogger/irclogger/config/thin.yml start 
