@@ -1,10 +1,10 @@
 ---
 database: mysql2://root@localhost/irclogs
 server: irc.freenode.net
+port: 6667
+use_ssl: false
 username: irclogger-test
 realname: whitequark's logger bot
-nicknames:
-  - logger_test
-  - logger_test1
+nickname: irclogger-test
 channels:
   - "#irclogger-test"

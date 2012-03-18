@@ -5,4 +5,5 @@ pid: tmp/viewer.pid
 rackup: config/viewer.ru
 log: log/viewer.log
 socket: /tmp/irclogger.sock
+#port: 30000
 daemonize: true

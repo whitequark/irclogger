@@ -1,0 +1,19 @@
+What is this?
+	This is IRC logging service, made of 2 separate modules: logger.rb, which logs IRC and dumps needed stuff to MySQL database and viewer.rb, which is front-end for viewing entries in database. viewer.rb is made on sinatra and runs on thin webserver. If you have needed guts, you can migrate code to something other.
+
+Requirements:
+	MySQL MyISAM database (InnoDB has no fulltext search compatibility, sorry)
+	Ruby 1.9.3
+	Gems: bundler net-yail sinatra date sequel mysql2
+	Linux/FreeBSD (both tested)
+	~100MB RAM free
+
+Basic configuration:
+	Setup everything at irclogger/config
+	Import schema.sql to your database
+	Change hardcoded greetings and title at irclogger/views/*.haml
+	Setup your analytics if needed at irclogger/views/_analytics.erb
+	Test run your logger by launching launch-logger.sh, if something bad happens, bot will respawn and dump trace to irclogger/log/logger.log. Dont do this at public IRC channels, because if cause of respawn is recursive, you will end with 10-15 bots on channel
+	If everything is OK with logger, launch viewer with launch-viewer.sh
+	Test your viewer, usualy, theres nothing where something can go wrong
+	Enjoy!

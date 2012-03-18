@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require "rubygems"
 require "bundler/setup"
 $: << File.join(File.dirname(__FILE__), 'lib')
@@ -5,6 +7,11 @@ $: << File.join(File.dirname(__FILE__), 'lib')
 require 'sinatra'
 require 'date'
 require 'irclogger'
+
+# enable this to use HTTP Authentication
+#use Rack::Auth::Basic, "Authentication required" do |username, password|
+#  [username, password] == ['admin', 'admin']
+#end
 
 helpers do
   include Rack::Utils

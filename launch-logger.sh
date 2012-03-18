@@ -4,4 +4,4 @@
 #. "$HOME/.rvm/scripts/rvm"
 #rvm use 1.9.3
 
-thin -C /path/to/irclogger/config/thin.yml start 
+./logger.rb &
