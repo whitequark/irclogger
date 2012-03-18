@@ -74,13 +74,11 @@ def go!
     error = true
   end
 
-# reply on any ctcp with version.
   irc.on_ctcp { |e| 
     irc.ctcpreply(e.nick,"VERSION Logger");
   }
   
   irc.start_listening
-  
   trap("INT")  { exit }
   trap("QUIT") { exit }
 
