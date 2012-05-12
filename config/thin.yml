@@ -1,5 +1,4 @@
 ---
-chdir: /var/www/irclog.whitequark.org/
 environment: production
 pid: tmp/viewer.pid
 rackup: config/viewer.ru
