@@ -3,8 +3,6 @@ database: mysql2://root@localhost/irclogs
 server: irc.freenode.net
 username: irclogger-test
 realname: whitequark's logger bot
-nicknames:
-  - logger_test
-  - logger_test1
+nickname: logger_test
 channels:
   - "#irclogger-test"

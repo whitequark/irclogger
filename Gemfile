@@ -9,4 +9,4 @@ gem 'mysql2'
 
 gem 'thin'
 
-gem 'net-yail'
+gem 'cinch'
