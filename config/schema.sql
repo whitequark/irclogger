@@ -8,5 +8,5 @@ CREATE TABLE `irclog` (
         PRIMARY KEY(`id`)
 ) CHARSET=utf8;
 
-CREATE INDEX `irclog_timestamp_index` ON `irclog` (timestamp);
+CREATE INDEX `irclog_channel_timestamp_index` ON `irclog` (channel, timestamp);
 CREATE FULLTEXT INDEX `irclog_fulltext_index` ON `irclog` (nick, line);
