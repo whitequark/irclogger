@@ -4,4 +4,4 @@
 
 rvm use 1.9.3
 
-thin -C /var/www/irclog.whitequark.org/config/thin.yml start
+bundle exec thin -C /var/www/irclog.whitequark.org/config/thin.yml start

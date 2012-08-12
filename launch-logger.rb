@@ -4,4 +4,4 @@
 
 rvm use 1.9.3
 
-./logger.rb &
+./logger.rb </dev/null >/dev/null 2>&1 &
