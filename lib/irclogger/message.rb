@@ -93,4 +93,8 @@ class Message < Sequel::Model(:irclog)
     order(:timestamp).filter(:channel => channel).filter('nick is not null').
            filter('match (nick, line) against (? in boolean mode)', query)
   end
+
+  def self.any_recent_messages?(interval = 600)
+    filter('timestamp > ?', Time.now.to_i - interval).any?
+  end
 end

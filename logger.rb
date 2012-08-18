@@ -8,6 +8,11 @@ require 'set'
 require 'irclogger'
 require 'cinch'
 
+pidfile = File.join(File.dirname(__FILE__), 'tmp', 'logger.pid')
+File.open(pidfile, 'w') do |f|
+  f.write Process.pid
+end
+
 bot = Cinch::Bot.new do
   configure do |c|
     c.server   = Config['server']
