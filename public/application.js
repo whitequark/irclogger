@@ -147,11 +147,13 @@ $(document).ready(function() {
     if(e.keyCode == 16) shift = false;
   });
 
-  $("#log, #clear_selection").click(function() {
-    setHash("");
-    clearHighlight();
+  $("#log .log-messages, #clear_selection").click(function(event) {
+    if($(event.target).is($(this))) {
+      setHash("");
+      clearHighlight();
 
-    return false;
+      return false;
+    }
   });
 
   var filterTimeout = null;
