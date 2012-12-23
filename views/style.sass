@@ -50,6 +50,7 @@ input
   top: 3px
   width: 12px
   height: 12px
+  margin-right: -22px
   background: no-repeat url(/images/clear.png)
   &:hover
     background-position: -12px 0
@@ -179,6 +180,10 @@ header
   .chain:before
     content: "↑"
     color: $link_color
+
+#log.without-noise
+  .op-join, .op-leave, .op-quit
+    display: none !important
 
 .pagination
   .current

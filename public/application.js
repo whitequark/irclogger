@@ -41,6 +41,14 @@ function highlightChain(id) {
   }
 }
 
+function filterJoinPart() {
+  if($('#show_noise').is(':checked')) {
+    $("#log").removeClass('without-noise');
+  } else {
+    $("#log").addClass('without-noise');
+  }
+}
+
 function filterLines(query) {
   if(query == null || query == "") {
     $("#clear_filter").hide();
@@ -102,7 +110,7 @@ function setHash(selection, filter) {
   var newHash = (currentSelection || '') + ';' + (currentFilter || '');
 
   var elems = $("[id='" + newHash + "']");
-  elems.attr('id', ''); 
+  elems.attr('id', '');
   window.location.hash = '#' + newHash;
   elems.attr('id', currentSelection);
 }
@@ -167,6 +175,10 @@ $(document).ready(function() {
         highlightedElem.scrollIntoView();
       }, 200);
     }
+  });
+
+  $("#show_noise").change(function() {
+    filterJoinPart();
   });
 
   $(".chain").click(function() {

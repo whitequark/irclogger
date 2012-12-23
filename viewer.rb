@@ -103,6 +103,10 @@ get '/' do
   haml :index
 end
 
+get '/help/search' do
+  haml :search_help
+end
+
 get '/style.css' do
   sass :style
 end
@@ -116,7 +120,7 @@ get '/:channel/search' do
   @limit = 300
 
   if params[:q].length >= 3
-    @messages = Message.find_by_channel_and_fulltext(@channel, params[:q])
+    @messages = Message.search_in_channel(@channel, params[:q])
     @message_count = @messages.count
     @messages = @messages.limit(@limit, ((params[:page] || 1).to_i - 1) * @limit)
   end

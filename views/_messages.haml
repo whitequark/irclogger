@@ -1,6 +1,7 @@
 %div{:class => "log-messages with-panel"}
   - messages.each do |message|
-    %div{:class => message.type, :data => message.data}
+    %div{:class => [message.type, "op-#{message.opcode || 'msg'}"].join(' '),
+         :data => message.data}
       - time = Time.at(message.timestamp).gmtime
       - if dates
         %a.timeref{:href => "/#{channel @channel}/#{time.to_date}##{message.timestamp}"}= time.strftime("%Y-%m-%d %H:%M")

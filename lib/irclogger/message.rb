@@ -16,11 +16,11 @@ class Message < Sequel::Model(:irclog)
   end
 
   def talk?
-    !info? && !me_tell?
+    opcode.nil? && !me_tell?
   end
 
   def info?
-    nick.nil?
+    !opcode.nil?
   end
 
   def self.nicks(messages)
@@ -79,7 +79,7 @@ class Message < Sequel::Model(:irclog)
   end
 
   def self.check_by_channel_and_date(channel, date)
-    find_by_channel_and_date(channel, date).filter('nick is not null').any?
+    find_by_channel_and_date(channel, date).filter('opcode is null').any?
   end
 
   def self.check_by_channel_and_month(channel, date)
@@ -89,9 +89,19 @@ class Message < Sequel::Model(:irclog)
         filter(:channel => channel).any?
   end
 
+  def self.search_in_channel(channel, query)
+    if query =~ /^kickban:(.*)/
+      order(:timestamp).filter(:channel => channel).
+          filter('opcode = "kick" or opcode = "ban"').
+          filter('nick like ?', "%#{$1.strip}%")
+    else
+      find_by_channel_and_fulltext(channel, query)
+    end
+  end
+
   def self.find_by_channel_and_fulltext(channel, query)
-    order(:timestamp).filter(:channel => channel).filter('nick is not null').
-           filter('match (nick, line) against (? in boolean mode)', query)
+    order(:timestamp).filter(:channel => channel).filter('opcode is null').
+          filter('match (nick, line) against (? in boolean mode)', query)
   end
 
   def self.any_recent_messages?(interval = 600)

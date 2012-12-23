@@ -1,8 +1,13 @@
-%section#log
+%section#log{:class => 'without-noise'}
   %aside#log-panel
-    Filter:
+    %label{:for => 'filter'}
+      Filter:
     %input#filter
     %span.clear-input#clear_filter{:style => 'display:none'}
+
+    %label{:for => 'show_noise'}
+      Show join/leave messages:
+    %input#show_noise{:type => 'checkbox'}
 
   = haml :_messages, locals: { :messages => @messages, :dates => false }
 

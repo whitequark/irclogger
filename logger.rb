@@ -34,22 +34,30 @@ bot = Cinch::Bot.new do
 
   on :channel do |m|
     unless m.action?
-      Message.create(options.(m, nick: m.user.nick, line: m.message))
+      Message.create(options.(m,
+          nick: m.user.nick,
+          line: m.message))
     end
   end
 
   on :action do |m|
-    Message.create(options.(m, nick: "* " + m.user.nick, line: m.action_message))
+    Message.create(options.(m,
+        nick: "* " + m.user.nick,
+        line: m.action_message))
   end
 
   on :topic do |m|
-    Message.create(options.(m, line:
-        "#{m.user.nick} changed the topic of #{m.channel} to: #{m.message}"))
+    Message.create(options.(m,
+        opcode: 'topic',
+        nick:   m.user.nick,
+        line:   "#{m.user.nick} changed the topic of #{m.channel} to: #{m.message}"))
   end
 
   on :join do |m|
-    Message.create(options.(m, line:
-        "#{m.user.nick} has joined #{m.channel}"))
+    Message.create(options.(m,
+        opcode: 'join',
+        nick:   m.user.nick,
+        line:   "#{m.user.nick} has joined #{m.channel}"))
 
     user_lists_mutex.synchronize do
       if m.user.nick == bot.nick
@@ -61,8 +69,10 @@ bot = Cinch::Bot.new do
   end
 
   on :part do |m|
-    Message.create(options.(m, line:
-        "#{m.user.nick} has left #{m.channel} [#{m.message}]"))
+    Message.create(options.(m,
+        opcode: 'leave',
+        nick:   m.user.nick,
+        line:   "#{m.user.nick} has left #{m.channel} [#{m.message}]"))
 
     user_lists_mutex.synchronize do
       user_lists[m.channel.name].delete m.user.nick
@@ -70,11 +80,33 @@ bot = Cinch::Bot.new do
   end
 
   on :kick do |m|
-    Message.create(options.(m, line:
-        "#{m.params[1]} was kicked from #{m.channel} by #{m.user.nick} [#{m.message}]"))
+    Message.create(options.(m,
+        opcode: 'kick',
+        nick:   m.params[1],
+        line:   "#{m.params[1]} was kicked from #{m.channel} by #{m.user.nick} [#{m.message}]"))
 
     user_lists_mutex.synchronize do
       user_lists[m.channel.name].delete m.user.nick
+    end
+  end
+
+  on :ban do |m, ban|
+    actual_nick = nil
+
+    m.channel.users.each do |user, |
+      next if user == bot
+
+      if ban =~ user
+        actual_nick = user.nick
+        break
+      end
+    end
+
+    if actual_nick
+      Message.create(options.(m,
+          opcode: 'ban',
+          nick:   actual_nick,
+          line:   "#{actual_nick} was banned on #{m.channel} by #{m.user.nick} [#{m.message}]"))
     end
   end
 
@@ -84,6 +116,8 @@ bot = Cinch::Bot.new do
         if users.include? m.user.last_nick
           Message.create(options.(m,
               channel: channel,
+              opcode:  'nick',
+              nick:    m.user.last_nick,
               line:    "#{m.user.last_nick} is now known as #{m.user.nick}"))
 
           users.delete m.user.last_nick
@@ -100,6 +134,8 @@ bot = Cinch::Bot.new do
           Message.create({
             timestamp: m.time,
             channel:   channel,
+            opcode:    'quit',
+            nick:      m.user.nick,
             line:      "#{m.user.nick} has quit [#{m.message}]"
           })
 
