@@ -1,12 +1,13 @@
-%div{:class => [message.type, "op-#{message.opcode || 'msg'}"].join(' '),
-     :data => message.data}
+%div{class: [message.type, "op-#{message.opcode || 'msg'}"].join(' '),
+     data:  { timestamp: message.timestamp }.merge(message.data || {}),
+     id:    message.id}
 
   - time = Time.at(message.timestamp).gmtime
   - if dates
-    %a.timeref{:href => "/#{channel @channel}/#{time.to_date}##{message.timestamp}"}
+    %a.timeref{href: "/#{channel @channel}/#{time.to_date}##{message.id}"}
       %time{:timestamp => time.iso8601}><= time.strftime("%Y-%m-%d %H:%M")
   - else
-    %a.timestamp{:href => "##{message.timestamp}", :id => "#{message.timestamp}"}
+    %a.timestamp{href: "##{message.id}"}
       %time{:timestamp => time.iso8601}><= time.strftime("%H:%M")
 
   - if message.talk?

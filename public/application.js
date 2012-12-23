@@ -10,34 +10,47 @@ function clearHighlight() {
   $('#clear_selection').removeClass("active");
 }
 
+function highlightLine(id) {
+  $(".log-messages > div").removeClass("highlight");
+
+  if((by_id = $("#" + id)).length) {
+    return by_id.addClass("highlight");
+  } else {
+    return $("[data-timestamp=" + id + "]").addClass('highlight');
+  }
+}
+
 function highlightLines(range) {
-  prepareHighlight();
+  range = range.map(function(e) { return parseInt(e, 10); }).sort();
 
-  range = range.sort();
+  var first = range[0],
+      last  = range[1],
+      elem;
 
-  var first = range[0];
-  var last  = range[1] || range[0];
+  $(".log-messages > div").each(function() {
+    var timestamp = parseInt($(this).attr('data-timestamp'), 10);
 
-  $("#log .timestamp").each(function() {
-    var $entry = $(this).parent();
+    if (timestamp >= first && timestamp <= last) {
+      if(!elem)
+        elem = $(this);
 
-    if (this.id >= first && this.id <= last)
-      $entry.addClass("highlight");
-    else
-      $entry.removeClass("highlight");
+      $(this).addClass("highlight");
+    }
   })
+
+  return elem;
 }
 
 function highlightChain(id) {
-  prepareHighlight();
+  var elems = $("#" + id);
 
   while(true) {
-    var elems = $("#log [data-group='" + id + "']");
     elems.addClass("highlight");
 
-    var attr = elems[0].attributes.getNamedItem('data-previous_group');
-    if(!attr) return elems[0];
-    id = attr.value;
+    id = elems.attr('data-previous_group');
+    if(!id) return elems;
+
+    elems = $("#log [data-group='" + id + "']");
   }
 }
 
@@ -57,7 +70,7 @@ function filterLines(query) {
     $("#clear_filter").show();
 
     query = query.toLowerCase();
-    $("#log div").each(function() {
+    $(".log-messages > div").each(function() {
       if(this.textContent.toLowerCase().indexOf(query) != -1) {
         $(this).show();
       } else {
@@ -67,9 +80,10 @@ function filterLines(query) {
   }
 }
 
-function update(initial) {
-  var current = window.location.hash.substring(1).split(";");
+function hashUpdated(initial) {
+  var current   = window.location.hash.substring(1).split(";");
   var selection = current[0], filter = current[1];
+  var elem;
 
   if(selection != null) {
     if(selection == "") {
@@ -77,17 +91,17 @@ function update(initial) {
     } else {
       prepareHighlight();
 
-      var anchors = selection.split("-");
-      if(anchors[1] == 'chain') {
-        var elem = highlightChain($("[id='" + anchors[0] + "']:last").parent()[0].attributes.getNamedItem('data-group').value);
+      var range = selection.split("-");
+      if(range[1] == 'chain') {
+        elem = highlightChain($("#" + range[0] + ":parent").attr('data-group'));
+      } else if(range.length == 1) {
+        elem = highlightLine(range[0]);
       } else {
-        if(anchors && anchors.length > 0)
-          var elem = $("#" + anchors[0])[0];
-        highlightLines(anchors);
+        elem = highlightLines(range);
       }
 
       if(elem && initial)
-        elem.scrollIntoView();
+        elem[0].scrollIntoView();
     }
   }
 
@@ -96,8 +110,8 @@ function update(initial) {
 
   filterLines(filter);
 
-  if(anchors)
-    return anchors[0];
+  if(range)
+    return range[0];
 }
 
 function setHash(selection, filter) {
@@ -108,36 +122,15 @@ function setHash(selection, filter) {
   if(filter != null)    currentFilter = filter;
 
   var newHash = (currentSelection || '') + ';' + (currentFilter || '');
-
-  var elems = $("[id='" + newHash + "']");
-  elems.attr('id', '');
   window.location.hash = '#' + newHash;
-  elems.attr('id', currentSelection);
 }
 
-$(window).hashchange(function() {
-  update();
-});
+$(window).hashchange(hashUpdated);
 
 $(document).ready(function() {
-  update(true);
+  hashUpdated(true);
 
   var shift = false;
-
-  $("a.timestamp").click(function() {
-    prepareHighlight();
-
-    if(shift) {
-      var from = update();
-      var to = this.id;
-
-      setHash(from + "-" + to);
-    } else {
-      setHash(this.id);
-    }
-
-    return false;
-  });
 
   $(document).keydown(function(e) {
     if(e.keyCode == 16) shift = true;
@@ -150,10 +143,28 @@ $(document).ready(function() {
   $("#log .log-messages, #clear_selection").click(function(event) {
     if($(event.target).is($(this))) {
       setHash("");
-      clearHighlight();
 
       return false;
     }
+  });
+
+  $("a.timestamp").click(function() {
+    var $line = $(this).parent();
+
+    if(shift) {
+      var from = hashUpdated(), elem;
+
+      if((from_timestamp = $("#" + from).attr('data-timestamp')))
+        from = from_timestamp;
+
+      var to = $line.attr('data-timestamp');
+
+      setHash(from + "-" + to);
+    } else {
+      setHash($line.attr('id'));
+    }
+
+    return false;
   });
 
   var filterTimeout = null;
@@ -184,7 +195,7 @@ $(document).ready(function() {
   });
 
   $(".chain").click(function() {
-     setHash($(this).parent().find('.timestamp')[0].id + "-chain");
+     setHash($(this).parents('.talk').attr('data-id') + "-chain");
 
      return false;
   });
