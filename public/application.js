@@ -5,7 +5,8 @@ function scrollTo(jqElem, delay) {
     }, 200);
   }
 
-  $(jqElem)[0].scrollIntoView();
+  if(jqElem.length)
+    jqElem[0].scrollIntoView();
 }
 
 function prepareHighlight() {
