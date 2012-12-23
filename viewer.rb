@@ -6,6 +6,22 @@ require 'sinatra'
 require 'date'
 require 'irclogger'
 
+class DeferredGC
+  def initialize(app)
+    @app = app
+  end
+
+  def call(env)
+    GC.disable
+    @app.call(env)
+  ensure
+    GC.enable
+    GC.start
+  end
+end
+
+use DeferredGC
+
 helpers do
   include Rack::Utils
 
@@ -48,7 +64,7 @@ helpers do
       gsub(/(^|\s)(\*[^\s](?:|.*?[^\s])\*)(\s|$)/, '\1<b>\2</b>\3').
       # _underlined_
       gsub(/(^|\s)(_[^\s](?:|.*?[^\s])_)(\s|$)/, '\1<u>\2</u>\3').
-      gsub(/^([A-Za-z_0-9|.`-]+)/) do
+      gsub(Message::NICK_PATTERN) do
         if nicks && nicks.include?($1)
           "<span class='chain'>#$1</span>"
         else
@@ -57,10 +73,14 @@ helpers do
       end
   end
 
+  CAL_CACHE = Hash.new do |h, k|
+                h[k] = `cal #{k}`.split("\n")
+              end
+
   def calendar(channel, date=nil, links=true)
     origin = date || Date.today
 
-    cal = `cal #{origin.month} #{origin.year}`.split("\n")
+    cal = CAL_CACHE["#{origin.month} #{origin.year}"]
     cal = "\n<span class='header'>#{cal[1]}</span>\n" + cal[2..-1].join("\n")
     cal.gsub!("_\b", '')
 
@@ -140,8 +160,8 @@ get '/:channel/:date?' do
     @date = Date.parse(params[:date])
 
     dataset   = Message.find_by_channel_and_date(@channel, @date)
-    @messages = Message.track_chains(dataset)
     @nicks    = Message.nicks(dataset)
+    @messages = Message.track_chains(dataset, @nicks)
     @topic    = Message.most_recent_topic_for(@channel, @date)
 
     haml :channel

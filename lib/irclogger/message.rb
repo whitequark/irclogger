@@ -1,5 +1,9 @@
+require 'set'
+
 class Message < Sequel::Model(:irclog)
   attr_accessor :data
+
+  NICK_PATTERN = /^([A-Za-z_0-9|.`-]+)/
 
   def type
     if talk?
@@ -24,21 +28,24 @@ class Message < Sequel::Model(:irclog)
   end
 
   def self.nicks(messages)
-    messages.filter('nick is not null').map(:nick)
+    messages.filter('nick is not null').
+        select(:nick).distinct(:nick).
+        map(&:nick).to_set
   end
 
-  def self.track_chains(messages)
+  def self.track_chains(messages, nicks)
     groups, group_nicks, last = {}, {}, {}
     last_group_id, group_id, current_nick = 0, nil, nil
     prev_group_id = nil
     last_refs = {}
 
-    nicks = nicks(messages)
     messages.to_a.each do |m|
       next unless m.talk?
 
-      nick = nicks.find { |n| m.line.start_with? n }
-      if nick || (m.nick != current_nick) || group_id.nil?
+      m.line =~ NICK_PATTERN
+      nick = $1
+
+      if nicks.include?(nick) || (m.nick != current_nick) || group_id.nil?
         current_nick = m.nick
 
         if nick
@@ -79,14 +86,18 @@ class Message < Sequel::Model(:irclog)
   end
 
   def self.check_by_channel_and_date(channel, date)
-    find_by_channel_and_date(channel, date).filter('opcode is null').any?
+    find_by_channel_and_date(channel, date).
+        filter('opcode is null').
+        count > 0
   end
 
   def self.check_by_channel_and_month(channel, date)
     from = Time.utc(date.year, date.month, 1)
     to   = Time.utc((date >> 1).year, (date >> 1).month, 1) - 1
+
     filter('timestamp > ? and timestamp < ?', from.to_i, to.to_i).
-        filter(:channel => channel).any?
+        filter(:channel => channel).
+        count > 0
   end
 
   def self.search_in_channel(channel, query)
