@@ -172,7 +172,7 @@ var Live = {
   },
 
   scroll: function() {
-    scrollTo($('.log-messages div:visible:last-child'), true);
+    scrollTo($('.log-messages div:visible').last(), true);
   },
 
   toggle: function() {
