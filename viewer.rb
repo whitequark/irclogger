@@ -44,7 +44,9 @@ helpers do
         %(#{a}<a href="#{text}" class="link" target="_blank">#{text}</a>#{d})
       end
     end.
+      # *bold*
       gsub(/(^|\s)(\*[^\s](?:|.*?[^\s])\*)(\s|$)/, '\1<b>\2</b>\3').
+      # _underlined_
       gsub(/(^|\s)(_[^\s](?:|.*?[^\s])_)(\s|$)/, '\1<u>\2</u>\3').
       gsub(/^([A-Za-z_0-9|.`-]+)/) do
         if nicks && nicks.include?($1)
@@ -134,9 +136,10 @@ get '/:channel/:date?' do
   if params[:date]
     @date = Date.parse(params[:date])
 
-    dataset = Message.find_by_channel_and_date(@channel, @date)
+    dataset   = Message.find_by_channel_and_date(@channel, @date)
     @messages = Message.track_chains(dataset)
-    @nicks = Message.nicks(dataset)
+    @nicks    = Message.nicks(dataset)
+    @topic    = Message.most_recent_topic_for(@date)
 
     haml :channel
   else

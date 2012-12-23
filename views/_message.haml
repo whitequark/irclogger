@@ -1,0 +1,21 @@
+%div{:class => [message.type, "op-#{message.opcode || 'msg'}"].join(' '),
+     :data => message.data}
+
+  - time = Time.at(message.timestamp).gmtime
+  - if dates
+    %a.timeref{:href => "/#{channel @channel}/#{time.to_date}##{message.timestamp}"}
+      %time{:timestamp => time.iso8601}><= time.strftime("%Y-%m-%d %H:%M")
+  - else
+    %a.timestamp{:href => "##{message.timestamp}", :id => "#{message.timestamp}"}
+      %time{:timestamp => time.iso8601}><= time.strftime("%H:%M")
+
+  - if message.talk?
+    &lt;
+    %span.nickname>= message.nick
+    &gt;
+  - elsif message.me_tell?
+    = message.nick
+
+  = format_message(escape_html(message.line), (@nicks if message.talk?))
+
+  %br
