@@ -209,7 +209,8 @@ get '/:channel/:date?' do
   @channel = "##{params[:channel].gsub '.', '#'}"
 
   if params[:date]
-    @date = Date.parse(params[:date])
+    @date     = Date.parse(params[:date])
+    @is_today = (@date == Time.now.gmtime.to_date)
 
     dataset   = Message.find_by_channel_and_date(@channel, @date)
     @nicks    = Message.nicks(dataset)

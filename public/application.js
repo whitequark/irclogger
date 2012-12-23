@@ -201,8 +201,8 @@ var Live = {
         return false;
       });
 
-      if(button.attr('data-start')) {
-        this.start();
+      if(button.attr('data-autostart')) {
+        this.toggle();
       }
     }
   }
