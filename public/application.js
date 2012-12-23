@@ -41,16 +41,13 @@ function highlightLines(range) {
   return elem;
 }
 
-function highlightChain(id) {
-  var elems = $("#" + id);
-
+function highlightChain(group) {
   while(true) {
+    var elems = $("#log [data-group='" + group + "']");
     elems.addClass("highlight");
 
     id = elems.attr('data-previous_group');
     if(!id) return elems;
-
-    elems = $("#log [data-group='" + id + "']");
   }
 }
 
@@ -93,14 +90,14 @@ function hashUpdated(initial) {
 
       var range = selection.split("-");
       if(range[1] == 'chain') {
-        elem = highlightChain($("#" + range[0] + ":parent").attr('data-group'));
+        elem = highlightChain($("#" + range[0]).attr('data-group'));
       } else if(range.length == 1) {
         elem = highlightLine(range[0]);
       } else {
         elem = highlightLines(range);
       }
 
-      if(elem && initial)
+      if(elem[0] && initial)
         elem[0].scrollIntoView();
     }
   }
@@ -195,7 +192,7 @@ $(document).ready(function() {
   });
 
   $(".chain").click(function() {
-     setHash($(this).parents('.talk').attr('data-id') + "-chain");
+     setHash($(this).parents('.talk').attr('id') + "-chain");
 
      return false;
   });
