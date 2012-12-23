@@ -119,15 +119,12 @@ function setHash(selection, filter) {
   if(filter != null)    currentFilter = filter;
 
   var newHash = (currentSelection || '') + ';' + (currentFilter || '');
-
-  var elems = $("[id='" + newHash + "']");
-  elems.attr('id', '');
-
   window.location.hash = '#' + newHash;
-  elems.attr('id', currentSelection);
 }
 
-$(window).hashchange(hashUpdated);
+$(window).hashchange(function() {
+  hashUpdated(false);
+});
 
 $(document).ready(function() {
   hashUpdated(true);
