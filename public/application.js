@@ -147,7 +147,7 @@ $(document).ready(function() {
     if(e.keyCode == 16) shift = false;
   });
 
-  $("#clear_selection").click(function() {
+  $("#log, #clear_selection").click(function() {
     setHash("");
     clearHighlight();
 
@@ -183,5 +183,7 @@ $(document).ready(function() {
 
   $(".chain").click(function() {
      setHash($(this).parent().find('.timestamp')[0].id + "-chain");
+
+     return false;
   });
 });
