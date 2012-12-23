@@ -93,7 +93,7 @@ class Message < Sequel::Model(:irclog)
     if query =~ /^kickban:(.*)/
       order(:timestamp).filter(:channel => channel).
           filter('opcode = "kick" or opcode = "ban"').
-          filter('nick like ?', "%#{$1.strip}%")
+          filter('nick like ?', "#{$1.strip}%")
     else
       find_by_channel_and_fulltext(channel, query)
     end
