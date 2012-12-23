@@ -6,6 +6,8 @@ gem 'sass'
 gem 'sequel'
 
 gem 'mysql2'
+gem 'redis'
+gem 'em-hiredis'
 
 gem 'thin'
 

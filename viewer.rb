@@ -3,24 +3,43 @@ require "bundler/setup"
 $: << File.join(File.dirname(__FILE__), 'lib')
 
 require 'sinatra'
+require 'haml'
 require 'date'
 require 'irclogger'
+require 'em-hiredis'
 
-class DeferredGC
-  def initialize(app)
-    @app = app
+module Channel
+  @subscribers = Hash.new { |h, k| h[k] = [] }
+
+  def self.subscribe(channel, &block)
+    @subscribers[channel] << block
+
+    block
   end
 
-  def call(env)
-    GC.disable
-    @app.call(env)
-  ensure
-    GC.enable
-    GC.start
+  def self.unsubscribe(channel, block)
+    @subscribers[channel].delete block
+
+    nil
+  end
+
+  def self.notify(channel, message_id)
+    message = Message[message_id]
+
+    @subscribers[channel].each do |block|
+      block.call(message)
+    end
   end
 end
 
-use DeferredGC
+EM::next_tick do
+  pubsub = EM::Hiredis.connect(Config['redis'])
+  pubsub.subscribe('message')
+  pubsub.on(:message) do |redis_channel, message|
+    channel, message_id = message.split
+    Channel.notify(channel, message_id)
+  end
+end
 
 helpers do
   include Rack::Utils
@@ -151,6 +170,20 @@ get '/:channel/search' do
   end
 
   haml :search
+end
+
+get '/:channel/stream', provides: 'text/event-stream' do
+  channel = "##{params[:channel].gsub '.', '#'}"
+
+  stream :keep_open do |out|
+    subscriber_id = Channel.subscribe(channel) do |msg|
+      out << haml(:_message, locals: { message: msg, dates: false }, layout: false)
+    end
+
+    proc = -> { Channel.unsubscribe(channel, subscriber_id) }
+    out.callback(&proc)
+    out.errback(&proc)
+  end
 end
 
 get '/:channel/:date?' do
