@@ -125,4 +125,10 @@ class Message < Sequel::Model(:irclog)
         filter('timestamp < ?', date.to_time.to_i).
         last
   end
+
+  def self.recent_for_channel(channel, id)
+    order(:timestamp).
+        filter(channel: channel).
+        filter('id > ?', id)
+  end
 end

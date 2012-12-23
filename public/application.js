@@ -122,6 +122,80 @@ function setHash(selection, filter) {
   window.location.hash = '#' + newHash;
 }
 
+var Live = {
+  eventSource: null,
+
+  channel:     null,
+  lastId:      null,
+
+  button:      null,
+
+  hasSupport: function() {
+    return !!EventSource;
+  },
+
+  active: function() {
+    return !!this.eventSource;
+  },
+
+  start: function() {
+    var $this = this;
+    var url = '/' + this.channel + '/stream?last_id=' + this.lastId;
+
+    this.eventSource = new EventSource(url);
+    this.eventSource.onmessage = function(event) {
+      $('.log-messages').append(event.data);
+
+      if(event.lastEventId)
+        $this.lastId = event.lastEventId;
+
+      $this.scroll();
+    };
+  },
+
+  stop: function() {
+    this.eventSource.close();
+    this.eventSource = null;
+  },
+
+  scroll: function() {
+    var lastRow = $('.log-messages div:last-child');
+    if(lastRow.is(':visible'))
+      lastRow[0].scrollIntoView();
+  },
+
+  toggle: function() {
+    if(this.active()) {
+      this.stop();
+      this.button.removeClass('active');
+    } else {
+      this.start();
+      this.button.addClass('active');
+    }
+  },
+
+  init: function(button) {
+    this.button  = button;
+    this.channel = button.attr('data-channel');
+    this.lastId  = button.attr('data-lastId');
+
+    if(this.hasSupport()) {
+      var $this = this;
+
+      button.show().click(function(e) {
+        $this.toggle();
+
+        return false;
+      });
+
+      if(button.attr('data-start')) {
+        this.start();
+        this.scroll();
+      }
+    }
+  }
+}
+
 $(window).hashchange(function() {
   hashUpdated(false);
 });
@@ -196,4 +270,7 @@ $(document).ready(function() {
 
      return false;
   });
+
+  if($('#live_logging').length)
+    Live.init($('#live_logging'));
 });

@@ -97,14 +97,14 @@ header
       a
         color: $active_color
 
+#clear_selection, #live_logging
+  color: $inactive_color
+  &.active
+    color: $active_color
+
 #options
   border-top: 1px solid $inactive_color
   padding: 10px
-
-  #clear_selection
-    color: $inactive_color
-    &.active
-      color: $active_color
 
   #search-box
     margin-top: 10px

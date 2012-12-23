@@ -4,6 +4,7 @@ $: << File.join(File.dirname(__FILE__), 'lib')
 
 require 'sinatra'
 require 'haml'
+require 'sass'
 require 'date'
 require 'irclogger'
 require 'em-hiredis'
@@ -175,9 +176,27 @@ end
 get '/:channel/stream', provides: 'text/event-stream' do
   channel = "##{params[:channel].gsub '.', '#'}"
 
+  last_message_id = env['HTTP_LAST_EVENT_ID'] || params['last_id']
+  last_messages   = Message.recent_for_channel(channel, last_message_id.to_i)
+
+  render_one = lambda do |stream, message|
+    stream << "id: #{message.id}\n"
+
+    html = haml(:_message, locals: { message: message, dates: false }, layout: false)
+    html.lines.each do |line|
+      stream << "data: #{line}" # \n is already there
+    end
+
+    stream << "\n"
+  end
+
   stream :keep_open do |out|
-    subscriber_id = Channel.subscribe(channel) do |msg|
-      out << haml(:_message, locals: { message: msg, dates: false }, layout: false)
+    last_messages.each do |message|
+      render_one.(out, message)
+    end
+
+    subscriber_id = Channel.subscribe(channel) do |message|
+      render_one.(out, message)
     end
 
     proc = -> { Channel.unsubscribe(channel, subscriber_id) }
