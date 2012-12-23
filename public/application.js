@@ -1,3 +1,13 @@
+function scrollTo(jqElem, delay) {
+  if(delay) {
+    setTimeout(function() {
+      scrollTo(jqElem, false);
+    }, 200);
+  }
+
+  $(jqElem)[0].scrollIntoView();
+}
+
 function prepareHighlight() {
   $('#log').addClass("highlight");
   $("#log div.highlight").removeClass("highlight");
@@ -97,8 +107,8 @@ function hashUpdated(initial) {
         elem = highlightLines(range);
       }
 
-      if(elem[0] && initial)
-        elem[0].scrollIntoView();
+      if(elem.length && initial)
+        scrollTo(elem);
     }
   }
 
@@ -162,8 +172,9 @@ var Live = {
 
   scroll: function() {
     var lastRow = $('.log-messages div:last-child');
-    if(lastRow.is(':visible'))
-      lastRow[0].scrollIntoView();
+    if(lastRow.is(':visible')) {
+      scrollTo(lastRow, true);
+    }
   },
 
   toggle: function() {
@@ -250,16 +261,11 @@ $(document).ready(function() {
   });
 
   $("#clear_filter").click(function() {
-    var highlightedElem = $("#log div.highlight:first")[0];
-
     setHash(null, "");
     $("#filter").val("");
 
-    if(highlightedElem) {
-      setTimeout(function() {
-        highlightedElem.scrollIntoView();
-      }, 200);
-    }
+    if(highlightedElem)
+      scrollTo($("#log div.highlight:first"), true);
   });
 
   $("#show_noise").change(function() {
