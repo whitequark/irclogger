@@ -1,5 +1,7 @@
 ---
 database: mysql2://root@localhost/irclogs
+redis: redis://localhost:6379
+
 server: irc.freenode.net
 username: irclogger-test
 realname: whitequark's logger bot
