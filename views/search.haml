@@ -13,10 +13,10 @@
           - else
             %a{:href => "/#{params[:channel]}/search?q=#{params[:q]}&page=#{page}"}= page
 
-  = haml :_messages, locals: { :messages => @messages, :dates => true }
 
-  - if @messages.nil? || @messages.empty?
-    - if params[:q].length < 3
-      Enter at least three letters as a keyword.
-    - else
-      No messages are found.
+  - if params[:q].length < 3
+    Enter at least three letters as a keyword.
+  - elsif @messages.nil? || @messages.empty?
+    No messages are found.
+  - else
+    = haml :_messages, locals: { messages: @messages, dates: true }
