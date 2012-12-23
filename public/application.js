@@ -171,10 +171,7 @@ var Live = {
   },
 
   scroll: function() {
-    var lastRow = $('.log-messages div:last-child');
-    if(lastRow.is(':visible')) {
-      scrollTo(lastRow, true);
-    }
+    scrollTo($('.log-messages div:visible:last-child'), true);
   },
 
   toggle: function() {
