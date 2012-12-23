@@ -151,6 +151,8 @@ var Live = {
 
       $this.scroll();
     };
+
+    this.scroll();
   },
 
   stop: function() {
@@ -190,7 +192,6 @@ var Live = {
 
       if(button.attr('data-start')) {
         this.start();
-        this.scroll();
       }
     }
   }
