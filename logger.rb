@@ -91,16 +91,8 @@ bot = Cinch::Bot.new do
   end
 
   on :ban do |m, ban|
-    actual_nick = nil
-
-    m.channel.users.each do |user, |
-      next if user == bot
-
-      if ban =~ user
-        actual_nick = user.nick
-        break
-      end
-    end
+    user = m.channel.users.find {|user, _| ban.match(user)}.first
+    actual_nick = user && user.nick
 
     if actual_nick
       Message.create(options.(m,
