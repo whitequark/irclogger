@@ -3,6 +3,7 @@ CREATE TABLE `irclog` (
         id INT auto_increment,
         channel VARCHAR(30),
         nick VARCHAR(40),
+	opcode VARCHAR(20), -- kick, ban
         timestamp INT,
         line TEXT,
         PRIMARY KEY(`id`)
