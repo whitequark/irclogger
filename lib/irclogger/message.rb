@@ -108,9 +108,9 @@ class Message < Sequel::Model(:irclog)
     filter('timestamp > ?', Time.now.to_i - interval).any?
   end
 
-  def self.most_recent_topic_for(date)
+  def self.most_recent_topic_for(channel, date)
     order(:timestamp).
-        filter(opcode: 'topic').
+        filter(channel: channel, opcode: 'topic').
         filter('timestamp < ?', date.to_time.to_i).
         last
   end

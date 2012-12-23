@@ -139,7 +139,7 @@ get '/:channel/:date?' do
     dataset   = Message.find_by_channel_and_date(@channel, @date)
     @messages = Message.track_chains(dataset)
     @nicks    = Message.nicks(dataset)
-    @topic    = Message.most_recent_topic_for(@date)
+    @topic    = Message.most_recent_topic_for(@channel, @date)
 
     haml :channel
   else
