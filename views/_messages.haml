@@ -2,11 +2,14 @@
   - messages.each do |message|
     %div{:class => [message.type, "op-#{message.opcode || 'msg'}"].join(' '),
          :data => message.data}
+
       - time = Time.at(message.timestamp).gmtime
       - if dates
-        %a.timeref{:href => "/#{channel @channel}/#{time.to_date}##{message.timestamp}"}= time.strftime("%Y-%m-%d %H:%M")
+        %a.timeref{:href => "/#{channel @channel}/#{time.to_date}##{message.timestamp}"}
+          %time><= time.strftime("%Y-%m-%d %H:%M")
       - else
-        %a.timestamp{:href => "##{message.timestamp}", :id => "#{message.timestamp}"}= time.strftime("%H:%M")
+        %a.timestamp{:href => "##{message.timestamp}", :id => "#{message.timestamp}"}
+          %time><= time.strftime("%H:%M")
 
       - if message.talk?
         &lt;
