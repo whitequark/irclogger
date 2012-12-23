@@ -6,10 +6,10 @@
       - time = Time.at(message.timestamp).gmtime
       - if dates
         %a.timeref{:href => "/#{channel @channel}/#{time.to_date}##{message.timestamp}"}
-          %time><= time.strftime("%Y-%m-%d %H:%M")
+          %time{:timestamp => time.iso8601}><= time.strftime("%Y-%m-%d %H:%M")
       - else
         %a.timestamp{:href => "##{message.timestamp}", :id => "#{message.timestamp}"}
-          %time><= time.strftime("%H:%M")
+          %time{:timestamp => time.iso8601}><= time.strftime("%H:%M")
 
       - if message.talk?
         &lt;
