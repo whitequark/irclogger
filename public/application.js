@@ -46,8 +46,8 @@ function highlightChain(group) {
     var elems = $("#log [data-group='" + group + "']");
     elems.addClass("highlight");
 
-    id = elems.attr('data-previous_group');
-    if(!id) return elems;
+    group = elems.attr('data-previous_group');
+    if(!group) return elems;
   }
 }
 
