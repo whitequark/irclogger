@@ -139,12 +139,10 @@ $(document).ready(function() {
     if(e.keyCode == 16) shift = false;
   });
 
-  $("#log .log-messages, #clear_selection").click(function(event) {
-    if($(event.target).is($(this))) {
-      setHash("");
+  $("#clear_selection").click(function(event) {
+    setHash("");
 
-      return false;
-    }
+    return false;
   });
 
   $("a.timestamp").click(function() {
