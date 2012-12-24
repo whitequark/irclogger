@@ -102,17 +102,30 @@ class Message < Sequel::Model(:irclog)
 
   def self.search_in_channel(channel, query)
     if query =~ /^kickban:(.*)/
-      order(:timestamp).filter(:channel => channel).
-          filter('opcode = "kick" or opcode = "ban"').
-          filter('nick like ?', "#{$1.strip}%")
+      find_by_channel_and_kickban(channel, $1)
+    elsif query =~ /^nick:(.*)/
+      find_by_channel_and_nick(channel, $1)
     else
       find_by_channel_and_fulltext(channel, query)
     end
   end
 
+  def self.find_by_channel_and_kickban(channel, query)
+    order(:timestamp).filter(:channel => channel).
+        filter('opcode = "kick" or opcode = "ban"').
+        filter('nick like ?', query.strip + "%")
+  end
+
   def self.find_by_channel_and_fulltext(channel, query)
-    order(:timestamp).filter(:channel => channel).filter('opcode is null').
-          filter('match (nick, line) against (? in boolean mode)', query)
+    order(:timestamp).filter(:channel => channel).
+        filter('opcode is null').
+        filter('match (nick, line) against (? in boolean mode)', query)
+  end
+
+  def self.find_by_channel_and_nick(channel, query)
+    order(:timestamp).filter(:channel => channel).
+        filter('opcode is null').
+        filter('nick like ?', query.strip + "%")
   end
 
   def self.any_recent_messages?(interval = 600)
