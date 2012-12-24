@@ -174,6 +174,8 @@ get '/:channel/search' do
 end
 
 get '/:channel/stream', provides: 'text/event-stream' do
+  response['X-Accel-Buffering'] = 'no'
+
   channel = "##{params[:channel].gsub '.', '#'}"
 
   last_message_id = env['HTTP_LAST_EVENT_ID'] || params['last_id']
