@@ -129,6 +129,7 @@ class Message < Sequel::Model(:irclog)
   def self.recent_for_channel(channel, id)
     order(:timestamp).
         filter(channel: channel).
+        filter('timestamp > ?', Time.now.to_i - 86400). # failsafe
         filter('id > ?', id)
   end
 end
