@@ -195,8 +195,11 @@ get '/:channel/stream', provides: 'text/event-stream' do
       render_one.(out, message)
     end
 
+    out.flush
+
     subscriber_id = Channel.subscribe(channel) do |message|
       render_one.(out, message)
+      out.flush
     end
 
     proc = -> { Channel.unsubscribe(channel, subscriber_id) }
