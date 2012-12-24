@@ -2,12 +2,15 @@ require "rubygems"
 require "bundler/setup"
 $: << File.join(File.dirname(__FILE__), 'lib')
 
+require 'date'
+require 'em-hiredis'
+require 'irclogger'
+
 require 'sinatra'
+require 'sinatra/streaming'
+
 require 'haml'
 require 'sass'
-require 'date'
-require 'irclogger'
-require 'em-hiredis'
 
 module Channel
   @subscribers = Hash.new { |h, k| h[k] = [] }
