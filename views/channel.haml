@@ -9,10 +9,11 @@
       Show join/leave messages:
     %input#show_noise{:type => 'checkbox'}
 
-    - last_id = @messages.last.id if @messages.any?
-    %a{href: '#', id: 'live_logging', style: 'display: none',
-       data: { channel:   channel(@channel),
-               lastId:    last_id,
-               autostart: @is_today }} Live updates
+    - if @is_today
+      - last_id = @messages.last.id if @messages.any?
+      %a{href: '#', id: 'live_logging', style: 'display: none',
+         data: { channel:   channel(@channel),
+                 lastId:    last_id,
+                 autostart: true }} Live updates
 
   = haml :_messages, locals: { :messages => @messages, :dates => false }
