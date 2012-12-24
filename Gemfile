@@ -1,8 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'sinatra', '~> 1.3'
-gem 'sinatra-contrib', '~> 1.3'
-
+gem 'sinatra', '~> 1.0'
 gem 'haml'
 gem 'sass'
 gem 'sequel'
