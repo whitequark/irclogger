@@ -21,6 +21,24 @@ function clearHighlight() {
   $('#clear_selection').removeClass("active");
 }
 
+function afterUpdate(where) {
+  where = where || $('#log');
+
+  if($('#log').attr('data-channel').indexOf('#teamhacksung') != -1) {
+    // dude
+    where.find('.nick').each(function() {
+      if(this.innerHTML.indexOf("nebkat") != -1) {
+        var name = this.textContent, newContent = "";
+        for(var i = 0; i < name.length; i++) {
+          var color = Math.floor(Math.random(10) * 16) + 1;
+          newContent += "<span class='nick-" + color + "'>" + name[i] + "</span>";
+        }
+        this.innerHTML = newContent;
+      }
+    });
+  }
+}
+
 function highlightLine(id) {
   $(".log-messages > div").removeClass("highlight");
 
@@ -187,10 +205,14 @@ var Live = {
 
     this.eventSource = new EventSource(url);
     this.eventSource.onmessage = function(event) {
-      $('.log-messages').append(event.data);
+      var newContent = $(event.data);
+
+      $('.log-messages').append(newContent);
 
       if(event.lastEventId)
         $this.lastId = event.lastEventId;
+
+      afterUpdate(newContent);
 
       $this.scroll();
     };
@@ -312,4 +334,6 @@ $(document).ready(function() {
 
   if($('#live_logging').length)
     Live.init('#live_logging');
+
+  afterUpdate();
 });
