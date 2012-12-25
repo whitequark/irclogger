@@ -12,7 +12,6 @@ module IrcLogger
       super
 
       @user_lists = Hash.new { |h,k| h[k] = Set.new }
-      @user_lists_mutex = Mutex.new
     end
 
     def redis
@@ -63,7 +62,7 @@ module IrcLogger
           nick:   m.user.nick,
           line:   "#{m.user.nick} has joined #{m.channel}"))
 
-      @user_lists_mutex.synchronize do
+      synchronize(:user_lists) do
         if m.user.nick == bot.nick
           @user_lists[m.channel.name] = m.channel.users.keys.map(&:nick).to_set
         end
@@ -79,7 +78,7 @@ module IrcLogger
           nick:   m.user.nick,
           line:   "#{m.user.nick} has left #{m.channel} [#{m.message}]"))
 
-      @user_lists_mutex.synchronize do
+      synchronize(:user_lists) do
         @user_lists[m.channel.name].delete m.user.nick
       end
     end
@@ -91,7 +90,7 @@ module IrcLogger
           nick:   m.params[1],
           line:   "#{m.params[1]} was kicked from #{m.channel} by #{m.user.nick} [#{m.message}]"))
 
-      @user_lists_mutex.synchronize do
+      synchronize(:user_lists) do
         @user_lists[m.channel.name].delete m.user.nick
       end
     end
@@ -110,7 +109,7 @@ module IrcLogger
 
     listen_to :nick, method: :on_nick
     def on_nick(m)
-      @user_lists_mutex.synchronize do
+      synchronize(:user_lists) do
         @user_lists.each do |channel, users|
           if users.include? m.user.last_nick
             post_message(options(m,
@@ -128,7 +127,7 @@ module IrcLogger
 
     listen_to :quit, method: :on_quit
     def on_quit(m)
-      @user_lists_mutex.synchronize do
+      synchronize(:user_lists) do
         @user_lists.each do |channel, users|
           if users.include? m.user.nick
             post_message({
