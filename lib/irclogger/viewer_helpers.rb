@@ -6,6 +6,11 @@ module IrcLogger
       name[1..-1].gsub '#', '.'
     end
 
+    def nick_class(nick)
+      color = nick.hash % 16 + 1
+      "nick nick-#{color}"
+    end
+
     AUTO_LINK_REGEXP = %r{
         (                          # leading text
           <\w+.*?>|                # leading HTML tag, or
@@ -43,7 +48,7 @@ module IrcLogger
         gsub(/(^|\s)(_[^\s](?:|.*?[^\s])_)(\s|$)/, '\1<u>\2</u>\3').
         gsub(Message::NICK_PATTERN) do
           if nicks && nicks.include?($1)
-            "<span class='chain'>#$1</span>"
+            "<span class='chain #{nick_class($1)}'>#$1</span>"
           else
             $&
           end

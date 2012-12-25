@@ -5,14 +5,14 @@
   - time = Time.at(message.timestamp).gmtime
   - if dates
     %a.timeref{href: "/#{channel @channel}/#{time.to_date}##{message.id}"}
-      %time{:timestamp => time.iso8601}><= time.strftime("%Y-%m-%d %H:%M")
+      %time{timestamp: time.iso8601}><= time.strftime("%Y-%m-%d %H:%M")
   - else
     %a.timestamp{href: "##{message.id}"}
-      %time{:timestamp => time.iso8601}><= time.strftime("%H:%M")
+      %time{timestamp: time.iso8601}><= time.strftime("%H:%M")
 
   - if message.talk?
     &lt;
-    %span.nickname>= message.nick
+    %span{class: nick_class(message.nick)}>= message.nick
     &gt;
   - elsif message.me_tell?
     = message.nick
