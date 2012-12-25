@@ -1,3 +1,5 @@
+require 'zlib' # crc32
+
 module IrcLogger
   module ViewerHelpers
     include Rack::Utils
@@ -7,7 +9,7 @@ module IrcLogger
     end
 
     def nick_class(nick)
-      color = nick.hash % 16 + 1
+      color = Zlib.crc32(nick) % 16 + 1
       "nick nick-#{color}"
     end
 
