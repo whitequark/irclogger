@@ -7,3 +7,4 @@ UPDATE irclog SET opcode='leave', nick=left(line, instr(line, ' ')) WHERE nick I
 UPDATE irclog SET opcode='kick', nick=left(line, instr(line, ' ')) WHERE nick IS NULL AND opcode IS NULL AND line LIKE '% was kicked from #%';
 UPDATE irclog SET opcode='nick', nick=left(line, instr(line, ' ')) WHERE nick IS NULL AND opcode IS NULL AND line LIKE '% is now known as %';
 UPDATE irclog SET opcode='quit', nick=left(line, instr(line, ' ')) WHERE nick IS NULL AND opcode IS NULL AND line LIKE '% has quit%';
+UPDATE irclog SET nick=TRIM(nick) WHERE nick IS NOT NULL;

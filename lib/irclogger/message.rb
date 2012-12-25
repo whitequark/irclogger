@@ -28,7 +28,8 @@ class Message < Sequel::Model(:irclog)
   end
 
   def self.nicks(messages)
-    messages.filter('nick is not null').
+    messages.
+        filter('nick is not null').
         select(:nick).distinct(:nick).
         map(&:nick).to_set
   end
