@@ -136,9 +136,17 @@ function setHash(selection, filter) {
 var Clock = {
   element: null,
 
+  ljust: function(value) {
+    if(value < 10)
+      return "0" + value;
+    else
+      return value;
+  },
+
   update: function() {
     var date = new Date();
-    var clock = date.getUTCHours() + ':' + date.getUTCMinutes() + ' UTC';
+    var clock = this.ljust(date.getUTCHours()) + ':' +
+                this.ljust(date.getUTCMinutes()) + ' UTC';
     this.element.html(clock);
 
     var $this = this;
