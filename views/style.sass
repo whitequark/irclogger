@@ -117,9 +117,14 @@ header
   .header
     color: #FF4500
 
+  .clock
+    text-align: center
+    color: $active_color
+    padding-bottom: 5px
+
   a
     text-decoration: none
-    color: #fff
+    color: $active_color
 
     &.current
       text-decoration: underline
@@ -187,7 +192,9 @@ header
 
 .pagination
   .current
-    color: $nick_color
+    color: $active_color
+  a
+    color: $passive_color
 
 div.highlight
   color: $active_color

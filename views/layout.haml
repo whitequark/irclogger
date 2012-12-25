@@ -25,6 +25,7 @@
   %body
     %section#channels
       %section#calendar
+        %pre.clock= Time.now.gmtime.strftime('%H:%M UTC')
         %pre= calendar(@channel, @date, !@channel.nil?)
 
       - if @channel
@@ -42,7 +43,7 @@
 
         - @channels.each do |channel|
           %li{:class => "#{"current" if channel == @channel}"}
-            %a{:href => "/#{channel(channel)}"}= channel
+            %a{:href => "/#{channel(channel)}/"}= channel
 
     = yield
 

@@ -133,6 +133,30 @@ function setHash(selection, filter) {
   window.location.hash = '#' + newHash;
 }
 
+var Clock = {
+  element: null,
+
+  update: function() {
+    var date = new Date();
+    var clock = date.getUTCHours() + ':' + date.getUTCMinutes() + ' UTC';
+    this.element.html(clock);
+
+    var $this = this;
+    setTimeout(function() {
+      $this.update();
+    }, 60 * 1000);
+  },
+
+  init: function(elem) {
+    this.element = $(elem);
+
+    var $this = this;
+    setTimeout(function() {
+      $this.update();
+    }, (60 - new Date().getUTCSeconds()) * 1000);
+  }
+};
+
 var Live = {
   eventSource: null,
 
@@ -186,25 +210,25 @@ var Live = {
   },
 
   init: function(button) {
-    this.button  = button;
-    this.channel = button.attr('data-channel');
-    this.lastId  = button.attr('data-lastId');
+    this.button  = $(button);
+    this.channel = this.button.attr('data-channel');
+    this.lastId  = this.button.attr('data-lastId');
 
     if(this.hasSupport()) {
       var $this = this;
 
-      button.show().click(function(e) {
+      this.button.show().click(function(e) {
         $this.toggle();
 
         return false;
       });
 
-      if(button.attr('data-autostart')) {
+      if(this.button.attr('data-autostart')) {
         this.toggle();
       }
     }
   }
-}
+};
 
 $(window).hashchange(function() {
   hashUpdated(false);
@@ -276,6 +300,8 @@ $(document).ready(function() {
      return false;
   });
 
+  Clock.init('#calendar .clock');
+
   if($('#live_logging').length)
-    Live.init($('#live_logging'));
+    Live.init('#live_logging');
 });
