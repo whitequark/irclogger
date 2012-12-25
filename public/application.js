@@ -30,8 +30,9 @@ function afterUpdate(where) {
       if(this.innerHTML.indexOf("nebkat") != -1) {
         var name = this.textContent, newContent = "";
         for(var i = 0; i < name.length; i++) {
-          var color = Math.floor(Math.random(10) * 16) + 1;
-          newContent += "<span class='nick-" + color + "'>" + name[i] + "</span>";
+          var color = "color:rgb(" + (55 + Math.floor((Math.random()*200)+1)) + "," + (55 + Math.floor((Math.random()*200)+1)) + "," + (55 + Math.floor((Math.random()*200)+1)) + ")"
+
+          newContent += "<span style='" + color + "'>" + name[i] + "</span>";
         }
         this.innerHTML = newContent;
       }
