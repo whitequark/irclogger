@@ -1,19 +1,19 @@
 %section#log{class: 'without-noise', data: { channel: @channel }}
   %aside#log-panel
-    %label{:for => 'filter'}
+    %label{for: 'filter'}
       Filter:
     %input#filter
-    %span.clear-input#clear_filter{:style => 'display:none'}
+    %span.clear-input#clear_filter{style: 'display:none'}
 
-    %label{:for => 'show_noise'}
+    %label{for: 'show_noise'}
       Show join/leave messages:
-    %input#show_noise{:type => 'checkbox'}
+    %input#show_noise{type: 'checkbox'}
 
     - if @is_today
       - last_id = @messages.last.id if @messages.any?
       %a{href: '#', id: 'live_logging', style: 'display: none',
-         data: { channel:   channel(@channel),
+         data: { channel:   channel_url(@channel),
                  lastId:    last_id,
                  autostart: true }} Live updates
 
-  = haml :_messages, locals: { :messages => @messages, :dates => false }
+  = haml :_messages, locals: { messages: @messages, dates: false }

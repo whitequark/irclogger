@@ -11,7 +11,7 @@
           - if page == (params[:page] || 1).to_i
             %span.current= page
           - else
-            %a{:href => "/#{params[:channel]}/search?q=#{params[:q]}&page=#{page}"}= page
+            %a{href: channel_url(@channel, "search?q=#{params[:q]}&page=#{page}")}= page
 
 
   - if params[:q].length < 3

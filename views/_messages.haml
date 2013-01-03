@@ -1,4 +1,4 @@
-%div{:class => "log-messages with-panel"}
+%div{class: "log-messages with-panel"}
   - if @topic
     = haml :_message, locals: { message: @topic, dates: true }
 

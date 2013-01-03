@@ -40,7 +40,7 @@ module IrcLogger
     end
 
     get '/:channel/search' do
-      @channel = "##{params[:channel].gsub '.', '#'}"
+      @channel = parse_channel(params[:channel])
       @limit   = 300
 
       if params[:q].length >= 3
@@ -58,7 +58,7 @@ module IrcLogger
     get '/:channel/stream', provides: 'text/event-stream' do
       response['X-Accel-Buffering'] = 'no'
 
-      channel = "##{params[:channel].gsub '.', '#'}"
+      channel = parse_channel(params[:channel])
 
       last_message_id = env['HTTP_LAST_EVENT_ID'] || params['last_id']
       last_messages   = Message.recent_for_channel(channel, last_message_id.to_i)
@@ -90,7 +90,7 @@ module IrcLogger
     end
 
     get '/:channel/:date?' do
-      @channel = "##{params[:channel].gsub '.', '#'}"
+      @channel = parse_channel(params[:channel])
       @date    = Date.parse(params[:date]) rescue nil
 
       if @date
@@ -103,7 +103,7 @@ module IrcLogger
 
         haml :channel
       else
-        redirect "/#{params[:channel]}/#{Time.now.gmtime.to_date}"
+        redirect channel_url(@channel, Time.now.gmtime.to_date)
       end
     end
   end

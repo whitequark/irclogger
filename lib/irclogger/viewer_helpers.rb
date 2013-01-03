@@ -4,8 +4,12 @@ module IrcLogger
   module ViewerHelpers
     include Rack::Utils
 
-    def channel(name)
-      name[1..-1].gsub '#', '.'
+    def channel_url(channel, postfix=nil)
+      "/#{channel[1..-1].gsub('#', '.')}/#{postfix}"
+    end
+
+    def parse_channel(channel)
+      "##{channel.gsub('.', '#')}"
     end
 
     def nick_class(nick)
@@ -74,7 +78,7 @@ module IrcLogger
           current = "current" if date && date.to_s == d
 
           if Message.check_by_channel_and_date(channel, Date.parse(d))
-            %Q{<a class="#{current}" href="/#{channel channel}/#{d}">#{$1}</a>}
+            %Q{<a class="#{current}" href="#{channel_url channel, d}">#{$1}</a>}
           else
             $1
           end
@@ -88,7 +92,7 @@ module IrcLogger
       if links
         link_if = ->(date, text) do
           if Message.check_by_channel_and_month(channel, date)
-            %Q{<a href="/#{channel channel}/#{date}">#{text}</a>}
+            %Q{<a href="#{channel_url channel, date}">#{text}</a>}
           else
             text
           end
