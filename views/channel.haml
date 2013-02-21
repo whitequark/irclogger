@@ -12,7 +12,7 @@
     - if @is_today
       - last_id = @messages.last.id if @messages.any?
       %a{href: '#', id: 'live_logging', style: 'display: none',
-         data: { channel:   channel_url(@channel),
+         data: { channel:   channel_escape(@channel),
                  lastId:    last_id,
                  autostart: true }} Live updates
 

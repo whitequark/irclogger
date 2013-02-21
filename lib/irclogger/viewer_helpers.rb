@@ -4,12 +4,16 @@ module IrcLogger
   module ViewerHelpers
     include Rack::Utils
 
-    def channel_url(channel, postfix=nil)
-      "/#{channel[1..-1].gsub('#', '.')}/#{postfix}"
+    def channel_escape(channel)
+      channel[1..-1].gsub('#', '.')
     end
 
-    def parse_channel(channel)
+    def channel_unescape(channel)
       "##{channel.gsub('.', '#')}"
+    end
+
+    def channel_url(channel, postfix=nil)
+      "/#{channel_escape channel}/#{postfix}"
     end
 
     def nick_class(nick)

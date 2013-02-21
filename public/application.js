@@ -202,7 +202,7 @@ var Live = {
 
   start: function() {
     var $this = this;
-    var url = '/' + this.channel + '/stream?last_id=' + this.lastId;
+    var url = '/' + this.channel + '/stream?last_id=' + (this.lastId || "");
 
     this.eventSource = new EventSource(url);
     this.eventSource.onmessage = function(event) {
@@ -254,7 +254,7 @@ var Live = {
         return false;
       });
 
-      if(this.button.attr('data-autostart')) {
+      if(this.button.attr('data-autostart') !== undefined) {
         this.toggle();
       }
     }
