@@ -10,6 +10,8 @@ function scrollTo(jqElem, delay) {
 }
 
 function prepareHighlight() {
+  Live.stop();
+
   $('#log').addClass("highlight");
   $("#log div.highlight").removeClass("highlight");
   $('#clear_selection').addClass("active");
@@ -219,11 +221,17 @@ var Live = {
     };
 
     this.scroll();
+
+    this.button.addClass('active');
   },
 
   stop: function() {
-    this.eventSource.close();
+    if(this.active())
+      this.eventSource.close();
+
     this.eventSource = null;
+
+    this.button.removeClass('active');
   },
 
   scroll: function() {
@@ -233,10 +241,8 @@ var Live = {
   toggle: function() {
     if(this.active()) {
       this.stop();
-      this.button.removeClass('active');
     } else {
       this.start();
-      this.button.addClass('active');
     }
   },
 
@@ -266,8 +272,6 @@ $(window).hashchange(function() {
 });
 
 $(document).ready(function() {
-  hashUpdated(true);
-
   var shift = false;
 
   $(document).keydown(function(e) {
@@ -336,5 +340,6 @@ $(document).ready(function() {
   if($('#live_logging').length)
     Live.init('#live_logging');
 
+  hashUpdated(true);
   afterUpdate();
 });
