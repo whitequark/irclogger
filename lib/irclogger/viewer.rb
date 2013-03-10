@@ -21,6 +21,9 @@ module IrcLogger
 
     before do
       @channels = DB["select channel from irclog group by channel"].map { |r| r[:channel] }
+      if (hidden_channels = Config['hidden_channels'])
+        @channels -= hidden_channels
+      end
     end
 
     get '/' do
