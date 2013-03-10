@@ -221,6 +221,7 @@ var Live = {
     };
 
     this.scroll();
+    clearHighlight();
 
     this.button.addClass('active');
   },
@@ -336,10 +337,10 @@ $(document).ready(function() {
   if($('#live_logging').length)
     Live.init('#live_logging');
 
-  var hasAnchor = !!hashUpdated(true);
+  var anchor = hashUpdated(true);
   afterUpdate();
 
   if($('#live_logging').attr('data-autostart') !== undefined &&
-       !has_anchor)
+       anchor === undefined)
     Live.toggle();
 });
