@@ -259,10 +259,6 @@ var Live = {
 
         return false;
       });
-
-      if(this.button.attr('data-autostart') !== undefined) {
-        this.toggle();
-      }
     }
   }
 };
@@ -340,6 +336,10 @@ $(document).ready(function() {
   if($('#live_logging').length)
     Live.init('#live_logging');
 
-  hashUpdated(true);
+  var hasAnchor = !!hashUpdated(true);
   afterUpdate();
+
+  if($('#live_logging').attr('data-autostart') !== undefined &&
+       !has_anchor)
+    Live.toggle();
 });
