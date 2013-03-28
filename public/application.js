@@ -232,7 +232,8 @@ var Live = {
 
     this.eventSource = null;
 
-    this.button.removeClass('active');
+    if(this.button)
+      this.button.removeClass('active');
   },
 
   scroll: function() {
