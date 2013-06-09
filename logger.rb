@@ -7,6 +7,15 @@ require 'irclogger/cinch_plugin'
 require 'redis'
 
 pidfile = File.join(File.dirname(__FILE__), 'tmp', 'logger.pid')
+
+begin
+  old_pid = File.read(pidfile).to_i
+  Process.kill 0, old_pid
+
+  raise "An existing logger process is running with pid #{old_pid}. Refusing to start"
+rescue Errno::ESRCH
+end
+
 File.open(pidfile, 'w') do |f|
   f.write Process.pid
 end
