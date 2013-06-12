@@ -5,11 +5,11 @@ module IrcLogger
     include Rack::Utils
 
     def channel_escape(channel)
-      channel[1..-1].gsub('#', '.')
+      channel[1..-1].gsub(/^#+/) { |m| '.' * m.length }
     end
 
     def channel_unescape(channel)
-      "##{channel.gsub('.', '#')}"
+      "##{channel.gsub(/^\.+/) { |m| '#' * m.length }}"
     end
 
     def channel_url(channel, postfix=nil)
