@@ -1,0 +1,16 @@
+upstream irclogger {
+  server unix:/tmp/irclogger.sock;
+}
+
+server {
+  listen [::];
+  server_name irclog.foobar.org;
+
+  root /var/www/irclog/public;
+
+  location / {
+    if (!-f $request_filename) {
+      proxy_pass http://irclogger;
+    }
+  }
+}

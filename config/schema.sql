@@ -10,4 +10,5 @@ CREATE TABLE `irclog` (
 ) CHARSET=utf8 ENGINE=MyISAM;
 
 CREATE INDEX `irclog_channel_timestamp_index` ON `irclog` (channel, timestamp);
+CREATE INDEX `irclog_channel_opcode_index` ON `irclog` (channel, opcode);
 CREATE FULLTEXT INDEX `irclog_fulltext_index` ON `irclog` (nick, line);
