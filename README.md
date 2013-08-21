@@ -39,6 +39,13 @@ Updating configuration
   1. Edit `config/application.yml`.
   2. `./deploy-logger.sh`
 
+FAQ
+---
+
+## Messages appear multiple times in the log
+
+Use the `./deploy-logger.sh` script for starting or restarting the logger. If an instance of it is already active, it will be killed by the script.
+
 Upgrading
 ---------
 
