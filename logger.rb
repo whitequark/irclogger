@@ -13,7 +13,7 @@ begin
   Process.kill 0, old_pid
 
   raise "An existing logger process is running with pid #{old_pid}. Refusing to start"
-rescue Errno::ESRCH
+rescue Errno::ESRCH, Errno::ENOENT
 end
 
 File.open(pidfile, 'w') do |f|
