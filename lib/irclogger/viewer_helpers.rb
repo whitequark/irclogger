@@ -49,7 +49,12 @@ module IrcLogger
           all
         else
           text = b + c
-          %(#{a}<a href="#{text}" class="link" target="_blank">#{text}</a>#{d})
+          if text =~ %r{\Ahttps?://}
+            link = text
+          else
+            link = "http://#{text}"
+          end
+          %(#{a}<a href="#{link}" class="link" target="_blank">#{text}</a>#{d})
         end
       end.
         # *bold*
