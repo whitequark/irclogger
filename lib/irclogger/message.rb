@@ -3,7 +3,7 @@ require 'set'
 class Message < Sequel::Model(:irclog)
   attr_accessor :data
 
-  NICK_PATTERN = /^([A-Za-z_0-9|.`-]+)/
+  NICK_PATTERN = /^([A-Za-z_0-9|.`-]+)/ # `
 
   def type
     if talk?
@@ -112,19 +112,19 @@ class Message < Sequel::Model(:irclog)
   end
 
   def self.find_by_channel_and_kickban(channel, query)
-    order(:timestamp).filter(:channel => channel).
+    order(:timestamp).reverse.filter(:channel => channel).
         filter('opcode = "kick" or opcode = "ban"').
         filter('nick like ?', query.strip + "%")
   end
 
   def self.find_by_channel_and_fulltext(channel, query)
-    order(:timestamp).filter(:channel => channel).
+    order(:timestamp).reverse.filter(:channel => channel).
         filter('opcode is null').
         filter('match (nick, line) against (? in boolean mode)', query)
   end
 
   def self.find_by_channel_and_nick(channel, query)
-    order(:timestamp).filter(:channel => channel).
+    order(:timestamp).reverse.filter(:channel => channel).
         filter('opcode is null').
         filter('nick like ?', query.strip + "%")
   end
