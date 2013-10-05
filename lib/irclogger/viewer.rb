@@ -46,7 +46,7 @@ module IrcLogger
       @channel = channel_unescape(params[:channel])
       @limit   = 300
 
-      if params[:q].length >= 3
+      if params[:q] && params[:q].length >= 3
         @messages      = Message.search_in_channel(@channel, params[:q])
         @message_count = @messages.count
 
