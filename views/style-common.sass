@@ -3,52 +3,11 @@
 $header_height: 0
 $channels_width: 165px
 
-$active_color: #fff
-$passive_color: #888
-$inactive_color: #444
-$border_color: #444
-$link_color: #f6f840
-$nick_color: #fb1263
-
-@mixin nick-colors
-  .nick-1
-    color: #F68E55
-  .nick-2
-    color: #F26C4F
-  .nick-3
-    color: #FBAF5C
-  .nick-4
-    color: #FFF467
-  .nick-5
-    color: #ACD372
-  .nick-6
-    color: #7CC576
-  .nick-7
-    color: #3BB878
-  .nick-8
-    color: #1ABBB4
-  .nick-9
-    color: #00BFF3
-  .nick-10
-    color: #438CCA
-  .nick-11
-    color: #5574B9
-  .nick-12
-    color: #605CA8
-  .nick-13
-    color: #855FA8
-  .nick-14
-    color: #A763A8
-  .nick-15
-    color: #F06EA9
-  .nick-16
-    color: #F26D7D
-
 body
-  background-color: #000
+  background-color: $background
   font-size: 12px
   line-height: 16px
-  color: #fff
+  color: $color0
   margin: 0
   padding: 0
 
@@ -60,12 +19,12 @@ body, pre, input
   font-family: "Menlo", "Monaco", monospace
 
 a
-  color: #fff
+  color: $color0
 
 input
-  border: 1px solid $border_color
-  background-color: #111
-  color: #fff
+  border: 1px solid $color3
+  background-color: $input_color
+  color: $color0
   outline: none
   height: 13px
   font-size: 12px
@@ -90,7 +49,7 @@ input
     background-position: -12px 0
 
 header
-  background-color: #000
+  background-color: $background
   height: $header_height
   line-height: $header_height
   position: fixed
@@ -98,11 +57,11 @@ header
   left: 0
   width: 100%
   text-align: center
-  border-bottom: 1px solid $inactive_color
+  border-bottom: 1px solid $color3
 
   a
     text-decoration: none
-    color: #555
+    color: $color2
 
   span
     position: absolute
@@ -110,34 +69,45 @@ header
     top: 0
     font-size: 18px
 
+$button_size: 14px
+
+#light_dark
+  background: url(/yin_yang.png)
+  background-size: $button_size
+  display: inline-block
+  width: $button_size
+  height: $button_size
+  vertical-align: text-top
+
 #channels
   position: fixed
   width: $channels_width
   top: $header_height
   height: 100%
-  border-right: 1px solid $border_color
+  border-right: 1px solid $color3
 
   ul
     list-style-type: none
     margin: 0
     padding: 10px
-    border-top: 1px solid $border_color
+    border-top: 1px solid $color3
 
     a
-      color: $passive_color
+      color: $color1
       text-decoration: none
 
     li.current
       a
-        color: $active_color
+        color: $color0
+        padding-left: 1ex
 
 #clear_selection, #live_logging
-  color: $inactive_color
+  color: $color1
   &.active
-    color: $active_color
+    color: $color0
 
 #options
-  border-top: 1px solid $inactive_color
+  border-top: 1px solid $color3
   padding: 10px
 
   #search-box
@@ -145,20 +115,20 @@ header
     width: $channels_width - 20px
 
 #calendar
-  color: #555
+  color: $color2
   padding: 10px
 
   .header
-    color: #FF4500
+    color: $header_color
 
   .clock
     text-align: center
-    color: $active_color
+    color: $color0
     padding-bottom: 5px
 
   a
     text-decoration: none
-    color: $active_color
+    color: $color0
 
     &.current
       text-decoration: underline
@@ -166,24 +136,23 @@ header
 #info
   padding: 10px
   margin: $header_height 0 0 ($channels_width + 1px)
-  color: $active_color
+  color: $color0
 
 #log-panel
-  color: $passive_color
-  border-bottom: 1px solid $border_color
+  border-bottom: 1px solid $color3
   margin: 0 0 5px 0
   padding: 0 0 5px 0
 
 #log
   padding: 10px
   margin: $header_height 0 0 ($channels_width + 1px)
-  color: $passive_color
+  color: $color1
 
   a.link
-    color: $passive_color
+    color: $color1
 
   a.timestamp, a.timeref
-    color: $inactive_color !important
+    color: $color2 !important
     text-decoration: none
 
     &:hover
@@ -202,10 +171,10 @@ header
 
 #log:not(.highlight) div, div.highlight
   &.talk
-    color: $active_color
+    color: $color0
 
   &.me-tell
-    color: #FFA500
+    color: $me_tell_color
 
   a.link
     color: $link_color !important
@@ -225,9 +194,9 @@ header
 
 .pagination
   .current
-    color: $active_color
+    color: $color0
   a
-    color: $passive_color
+    color: $color2
 
 div.highlight
-  color: $active_color
+  color: $color0

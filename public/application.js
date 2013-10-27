@@ -269,6 +269,14 @@ $(window).hashchange(function() {
   hashUpdated(false);
 });
 
+function setTheme() {
+  if(docCookies.getItem('theme') == "dark") {
+    $('#stylesheet').attr('href', '/style-dark.css');
+  } else {
+    $('#stylesheet').attr('href', '/style-light.css');
+  }
+}
+
 $(document).ready(function() {
   var shift = false;
 
@@ -279,6 +287,18 @@ $(document).ready(function() {
   $(document).keyup(function(e) {
     if(e.keyCode == 16) shift = false;
   });
+
+  $('#light_dark').click(function(event) {
+    if(docCookies.getItem('theme') == "dark") {
+      docCookies.setItem('theme', 'light');
+    } else {
+      docCookies.setItem('theme', 'dark');
+    }
+
+    setTheme();
+  });
+
+  setTheme();
 
   $("#clear_selection").click(function(event) {
     setHash("");

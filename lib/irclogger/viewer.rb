@@ -34,8 +34,12 @@ module IrcLogger
       haml :'help/search'
     end
 
-    get '/style.css' do
-      sass :style
+    get '/style-dark.css' do
+      sass :'style-dark'
+    end
+
+    get '/style-light.css' do
+      sass :'style-light'
     end
 
     get '/:channel' do
