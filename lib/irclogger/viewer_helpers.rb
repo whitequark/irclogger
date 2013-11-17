@@ -61,6 +61,8 @@ module IrcLogger
         gsub(/(^|\s)(\*[^\s](?:|.*?[^\s])\*)(\s|$)/, '\1<b>\2</b>\3').
         # _underlined_
         gsub(/(^|\s)(_[^\s](?:|.*?[^\s])_)(\s|$)/, '\1<u>\2</u>\3').
+        # strip color codes
+        gsub(/[\x02\x09\x13\x0f\x15\x16\x1f]|\x03\d{1,2}(,\d{1,2})?/, '').
         gsub(Message::NICK_PATTERN) do
           if nicks && nicks.include?($1)
             "<span class='chain #{nick_class($1)}'>#$1</span>"
