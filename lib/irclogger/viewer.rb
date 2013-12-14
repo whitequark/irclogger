@@ -96,21 +96,36 @@ module IrcLogger
       end
     end
 
-    get '/:channel/:date?' do
-      @channel = channel_unescape(params[:channel])
-      @date    = Date.parse(params[:date]) rescue nil
+    get '/:channel/:interval?.?:format?' do |channel, interval, format|
+      @channel = channel_unescape(channel)
 
-      if @date
-        @is_today = (@date == Time.now.gmtime.to_date)
+      begin
+        if interval =~ /^\d+-\d+-\d+$/
+          @date    = Date.parse(interval)
+          messages = Message.find_by_channel_and_date(@channel, @date)
+        elsif interval =~ /^\d+-\d+$/ && %w(txt).include?(format)
+          @date    = Date.parse(interval + "-01")
+          messages = Message.find_by_channel_and_month(@channel, @date)
+        else
+          raise ArgumentError, "invalid interval"
+        end
 
-        dataset   = Message.find_by_channel_and_date(@channel, @date)
-        @nicks    = Message.nicks(dataset)
-        @messages = Message.track_chains(dataset, @nicks)
-        @topic    = Message.most_recent_topic_for(@channel, @date)
+      rescue ArgumentError # invalid date or interval
+        redirect channel_url(@channel, Time.now.gmtime.to_date)
+      end
+
+      case format
+      when 'txt'
+        response['Content-Type'] = 'text/plain'
+
+        messages.map(&:to_s).join("\n")
+      else
+        @is_today    = (@date == Time.now.gmtime.to_date)
+        @nicks       = Message.nicks(messages)
+        @messages    = Message.track_chains(messages, @nicks)
+        @topic       = Message.most_recent_topic_for(@channel, @date)
 
         haml :channel
-      else
-        redirect channel_url(@channel, Time.now.gmtime.to_date)
       end
     end
   end
