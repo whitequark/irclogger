@@ -23,6 +23,7 @@ end
 bot = Cinch::Bot.new do
   configure do |c|
     c.server   = Config['server']
+    c.port     = Config['port'] if Config['port']
     c.channels = Config['channels']
     c.user     = Config['username']
     c.nick     = Config['nickname']
