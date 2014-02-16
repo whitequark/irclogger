@@ -22,12 +22,19 @@ end
 
 bot = Cinch::Bot.new do
   configure do |c|
+    # Server config
     c.server   = Config['server']
-    c.port     = Config['port'] if Config['port']
-    c.channels = Config['channels']
+    c.port     = Config['port'] unless Config['port'].nil?
+    c.ssl.use  = Config['ssl'] unless Config['ssl'].nil?
+
+    # Auth config
     c.user     = Config['username']
-    c.nick     = Config['nickname']
+    c.password = Config['password'] unless Config['password'].nil?
     c.realname = Config['realname']
+    c.nick     = Config['nickname']
+
+    # Logging config
+    c.channels = Config['channels']
 
     # cinch, oh god why?!
     c.plugins.plugins = [IrcLogger::CinchPlugin]
