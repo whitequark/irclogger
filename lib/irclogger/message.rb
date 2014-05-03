@@ -124,9 +124,8 @@ class Message < Sequel::Model(:irclog)
   end
 
   def self.date_index_for_channel(channel)
-    filter(channel: channel).
-        select{date(from_unixtime(timestamp)).as(:date)}.
-        distinct.
+    order(:timestamp).reverse.filter(channel: channel).
+        select{date(from_unixtime(timestamp)).as(:date)}.distinct.
         map(:date)
   end
 end
