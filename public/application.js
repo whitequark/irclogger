@@ -73,16 +73,6 @@ function highlightLines(range) {
   return elem;
 }
 
-function highlightChain(group) {
-  while(true) {
-    var elems = $("#log [data-group='" + group + "']");
-    elems.addClass("highlight");
-
-    group = elems.attr('data-previous_group');
-    if(!group) return elems;
-  }
-}
-
 function filterJoinPart() {
   if($('#show_noise').is(':checked')) {
     $("#log").removeClass('without-noise');
@@ -121,9 +111,7 @@ function hashUpdated(initial) {
       prepareHighlight();
 
       var range = selection.split("-");
-      if(range[1] == 'chain') {
-        elem = highlightChain($("#" + range[0]).attr('data-group'));
-      } else if(range.length == 1) {
+      if(range.length == 1) {
         elem = highlightLine(range[0]);
       } else {
         elem = highlightLines(range);
@@ -345,12 +333,6 @@ $(document).ready(function() {
 
   $("#show_noise").change(function() {
     filterJoinPart();
-  });
-
-  $(".chain").click(function() {
-     setHash($(this).parents('.talk').attr('id') + "-chain");
-
-     return false;
   });
 
   Clock.init('#calendar .clock');

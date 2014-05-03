@@ -1,8 +1,6 @@
 require 'set'
 
 class Message < Sequel::Model(:irclog)
-  attr_accessor :data
-
   NICK_PATTERN = /^([A-Za-z_0-9|.`-]+)/ # `
 
   def type
@@ -43,48 +41,6 @@ class Message < Sequel::Model(:irclog)
         filter('nick is not null').
         select(:nick).distinct(:nick).
         map(&:nick).to_set
-  end
-
-  def self.track_chains(messages, nicks)
-    groups, group_nicks, last = {}, {}, {}
-    last_group_id, group_id, current_nick = 0, nil, nil
-    prev_group_id = nil
-    last_refs = {}
-
-    messages.to_a.each do |m|
-      next unless m.talk?
-
-      m.line =~ NICK_PATTERN
-      nick = $1
-
-      if nicks.include?(nick) || (m.nick != current_nick) || group_id.nil?
-        current_nick = m.nick
-
-        if nick
-          last_refs[m.nick] = nil
-          last_refs[nick] = m.nick
-        end
-
-        last_ref = last[last_refs[m.nick]]
-        if last_ref && last_ref.line.start_with?(m.nick)
-          prev_group_id = groups[nick] || last_ref.data[:group]
-        else
-          prev_group_id = groups[nick]
-        end
-
-        if nick && group_nicks[groups[m.nick]] == nick &&
-            (!last[nick] || !last[m.nick] || last[m.nick].timestamp > last[nick].timestamp)
-          group_id = groups[m.nick]
-        else
-          group_id = (last_group_id += 1)
-          groups[m.nick] = group_id
-          group_nicks[group_id] = nick
-        end
-      end
-
-      m.data = { :group => group_id, :previous_group => prev_group_id }
-      last[m.nick] = m
-    end
   end
 
   def self.find_by_channel_and_date(channel, date)

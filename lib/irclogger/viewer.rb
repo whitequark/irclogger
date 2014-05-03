@@ -101,11 +101,11 @@ module IrcLogger
 
       begin
         if interval =~ /^\d+-\d+-\d+$/
-          @date    = Date.parse(interval)
-          messages = Message.find_by_channel_and_date(@channel, @date)
+          @date     = Date.parse(interval)
+          @messages = Message.find_by_channel_and_date(@channel, @date)
         elsif interval =~ /^\d+-\d+$/ && %w(txt).include?(format)
-          @date    = Date.parse(interval + "-01")
-          messages = Message.find_by_channel_and_month(@channel, @date)
+          @date     = Date.parse(interval + "-01")
+          @messages = Message.find_by_channel_and_month(@channel, @date)
         else
           raise ArgumentError, "invalid interval"
         end
@@ -121,8 +121,6 @@ module IrcLogger
         messages.map(&:to_s).join("\n")
       else
         @is_today    = (@date == Time.now.gmtime.to_date)
-        @nicks       = Message.nicks(messages)
-        @messages    = Message.track_chains(messages, @nicks)
         @topic       = Message.most_recent_topic_for(@channel, @date)
 
         haml :channel

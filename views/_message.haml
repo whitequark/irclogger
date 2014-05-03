@@ -1,5 +1,5 @@
 %div{class: [message.type, "op-#{message.opcode || 'msg'}"].join(' '),
-     data:  { timestamp: message.timestamp }.merge(message.data || {}),
+     data:  { timestamp: message.timestamp },
      id:    message.id}
 
   - time = Time.at(message.timestamp).gmtime
