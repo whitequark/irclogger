@@ -32,7 +32,7 @@ class Message < Sequel::Model(:irclog)
       if talk?
         " <#{nick}> #{line}"
       elsif me_tell?
-        " * #{nick} #{line}"
+        " #{nick} #{line}"
       else
         " #{line}"
       end

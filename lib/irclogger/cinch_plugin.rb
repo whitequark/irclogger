@@ -50,9 +50,10 @@ module IrcLogger
     listen_to :topic, method: :on_topic
     def on_topic(m)
       post_message(options(m,
-          opcode: 'topic',
-          nick:   m.user.nick,
-          line:   "#{m.user.nick} changed the topic of #{m.channel} to: #{m.message}"))
+          opcode:  'topic',
+          nick:    m.user.nick,
+          line:    "#{m.user.nick} changed the topic of #{m.channel} to: #{m.message}",
+          payload: m.message))
     end
 
     listen_to :join, method: :on_join
@@ -74,9 +75,10 @@ module IrcLogger
     listen_to :part, method: :on_part
     def on_part(m)
       post_message(options(m,
-          opcode: 'leave',
-          nick:   m.user.nick,
-          line:   "#{m.user.nick} has left #{m.channel} [#{m.message}]"))
+          opcode:  'leave',
+          nick:    m.user.nick,
+          line:    "#{m.user.nick} has left #{m.channel} [#{m.message}]",
+          payload: m.message))
 
       synchronize(:user_lists) do
         @user_lists[m.channel.name].delete m.user.nick
@@ -86,24 +88,29 @@ module IrcLogger
     listen_to :kick, method: :on_kick
     def on_kick(m)
       post_message(options(m,
-          opcode: 'kick',
-          nick:   m.params[1],
-          line:   "#{m.params[1]} was kicked from #{m.channel} by #{m.user.nick} [#{m.message}]"))
+          opcode:    'kick',
+          nick:      m.params[1],
+          line:      "#{m.params[1]} was kicked from #{m.channel} by #{m.user.nick} [#{m.message}]",
+          oper_nick: m.user.nick,
+          payload:   m.message))
 
       synchronize(:user_lists) do
         @user_lists[m.channel.name].delete m.user.nick
       end
     end
 
-    listen_to :ban, method: :on_ban do |m, ban|
+    listen_to :ban, method: :on_ban
+    def on_ban(m, ban)
       user = m.channel.users.find {|user, _| ban.match(user)}.first
       actual_nick = user && user.nick
 
       if actual_nick
         post_message(options(m,
-            opcode: 'ban',
-            nick:   actual_nick,
-            line:   "#{actual_nick} was banned on #{m.channel} by #{m.user.nick} [#{m.message}]"))
+            opcode:    'ban',
+            nick:      actual_nick,
+            line:      "#{actual_nick} was banned on #{m.channel} by #{m.user.nick} [#{m.message}]",
+            oper_nick: m.user.nick,
+            payload:   m.message))
       end
     end
 
@@ -116,7 +123,8 @@ module IrcLogger
                 channel: channel,
                 opcode:  'nick',
                 nick:    m.user.last_nick,
-                line:    "#{m.user.last_nick} is now known as #{m.user.nick}"))
+                line:    "#{m.user.last_nick} is now known as #{m.user.nick}",
+                payload: m.user.nick))
 
             users.delete m.user.last_nick
             users.add m.user.nick
@@ -135,7 +143,8 @@ module IrcLogger
               channel:   channel,
               opcode:    'quit',
               nick:      m.user.nick,
-              line:      "#{m.user.nick} has quit [#{m.message}]"
+              line:      "#{m.user.nick} has quit [#{m.message}]",
+              payload:   m.message
             })
 
             users.delete m.user.nick

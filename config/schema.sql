@@ -6,6 +6,8 @@ CREATE TABLE `irclog` (
         opcode VARCHAR(20),
         timestamp INT,
         line TEXT,
+        oper_nick VARCHAR(40),
+        payload TEXT,
         PRIMARY KEY(`id`)
 ) CHARSET=utf8 ENGINE=MyISAM;
 
