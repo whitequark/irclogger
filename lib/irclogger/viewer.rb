@@ -96,6 +96,13 @@ module IrcLogger
       end
     end
 
+    get '/:channel/index' do |channel|
+      @channel = channel_unescape(channel)
+      @index   = Message.date_index_for_channel(@channel)
+
+      haml :channel_index
+    end
+
     get '/:channel/:interval?.?:format?' do |channel, interval, format|
       @channel = channel_unescape(channel)
 
@@ -118,10 +125,10 @@ module IrcLogger
       when 'txt'
         response['Content-Type'] = 'text/plain'
 
-        messages.map(&:to_s).join("\n")
+        @messages.map(&:to_s).join("\n")
       else
-        @is_today    = (@date == Time.now.gmtime.to_date)
-        @topic       = Message.most_recent_topic_for(@channel, @date)
+        @is_today = (@date == Time.now.gmtime.to_date)
+        @topic    = Message.most_recent_topic_for(@channel, @date)
 
         haml :channel
       end

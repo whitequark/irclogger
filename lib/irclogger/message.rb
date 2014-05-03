@@ -122,4 +122,11 @@ class Message < Sequel::Model(:irclog)
         filter('timestamp > ?', Time.now.to_i - 86400). # failsafe
         filter('id > ?', id)
   end
+
+  def self.date_index_for_channel(channel)
+    filter(channel: channel).
+        select{date(from_unixtime(timestamp)).as(:date)}.
+        distinct.
+        map(:date)
+  end
 end

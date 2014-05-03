@@ -1,0 +1,6 @@
+%section#log
+  Index for channel #{@channel}:
+  %br
+
+  - @index.each do |date|
+    %a{href: channel_url(@channel, "#{date}.txt")}= date.to_s
