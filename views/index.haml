@@ -26,3 +26,7 @@
   .talk
     %a.timestamp= now
     If you want for this logger to be present on a particular <a href="http://freenode.net">freenode.net</a> channel, drop a letter to <a href="mailto:whitequark@whitequark.org">whitequark</a>.
+
+  .talk
+    %a.timestamp= now
+    This logger supports retrieving complete channel archives in text via <a href="http://lftp.yar.ru/">lftp</a>. Use <em>lftp -c 'mirror http://irclog.whitequark.org/$CHANNEL/index/'</em>.
