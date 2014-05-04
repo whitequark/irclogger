@@ -3,4 +3,4 @@
   %br
 
   - @index.each do |date|
-    %a{href: channel_url(@channel, "#{date}.txt")}= date.to_s
+    %a{href: channel_url(@channel, "index/#{date}.txt")}= date.to_s

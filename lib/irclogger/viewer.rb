@@ -96,11 +96,15 @@ module IrcLogger
       end
     end
 
-    get '/:channel/index' do |channel|
+    get '/:channel/index/' do |channel|
       @channel = channel_unescape(channel)
       @index   = Message.date_index_for_channel(@channel)
 
       haml :channel_index
+    end
+
+    get '/:channel/index/:elem' do |channel, elem|
+      redirect to("/#{channel}/#{elem}"), 301
     end
 
     get '/:channel/:interval?.?:format?' do |channel, interval, format|
