@@ -26,7 +26,7 @@ module IrcLogger
 
     def self.listen
       EM::next_tick do
-        pubsub = EM::Hiredis.connect(Config['redis'])
+        pubsub = EM::Hiredis.connect(Config['redis']).pubsub
 
         pubsub.subscribe('message')
 
