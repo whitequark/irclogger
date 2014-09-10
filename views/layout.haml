@@ -25,7 +25,7 @@
   %script{src: "/application.js"}
 
   %body
-    %section#channels
+    %section#sidebar
       %section#calendar
         %pre.clock= Time.now.gmtime.strftime('%H:%M UTC')
         %pre= calendar(@channel, @date, !@channel.nil?)
@@ -39,7 +39,7 @@
             %a{href: '/help/search'}
               ?
 
-      %ul
+      %ul#channels
         %li{class: "#{"current" unless @channel}"}
           %a{href: '/'} Console
 

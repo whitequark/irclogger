@@ -79,12 +79,18 @@ $button_size: 14px
   height: $button_size
   vertical-align: text-top
 
-#channels
+#sidebar
   position: fixed
   width: $channels_width
   top: $header_height
+  left: 0
   height: 100%
+  overflow: hidden
   border-right: 1px solid $color3
+
+  #channels
+    height: 100%
+    overflow-y: auto
 
   ul
     list-style-type: none
