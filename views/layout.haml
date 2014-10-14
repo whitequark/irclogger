@@ -13,6 +13,7 @@
   %meta{'http-equiv' => "X-UA-Compatible", content: "IE=9"}
   %link{rel: "stylesheet", href: "/style-light.css", id: "stylesheet"}
   %link{rel: "shortcut icon", href: "/favicon.png"}
+  %link{rel: "canonical", href: "http://#{Config['domain']}#{request.fullpath}"}
 
   - if @channel
     %meta{name: 'description', content: "channel #{@channel} IRC chat logs"}
