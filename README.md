@@ -46,6 +46,10 @@ FAQ
 
 Use the `./deploy-logger.sh` script for starting or restarting the logger. If an instance of it is already active, it will be killed by the script.
 
+### The channel list does not appear in the sidebar
+
+The channel list only appears on the domain that matches the "domain" field in application.yml. This is done to allow pointing other domains to the main one via CNAME, e.g. see [logs.jruby.org](http://logs.jruby.org/jruby).
+
 Upgrading
 ---------
 
