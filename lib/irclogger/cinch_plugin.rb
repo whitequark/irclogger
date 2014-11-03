@@ -152,10 +152,5 @@ module IrcLogger
         end
       end
     end
-
-    listen_to :invite, method: :on_invite
-    def on_invite(m)
-      bot.join(m.channel)
-    end
   end
 end
