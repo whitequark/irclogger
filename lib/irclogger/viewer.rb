@@ -108,6 +108,8 @@ module IrcLogger
     end
 
     get '/:channel/:interval?.?:format?' do |channel, interval, format|
+      pass if channel == '__sinatra__'
+
       @channel = channel_unescape(channel)
 
       begin
