@@ -6,15 +6,19 @@
     %input#filter
     %span.clear-input#clear_filter{style: 'display:none'}
 
-    %label{for: 'show_noise'}
-      Show join/leave messages:
-    %input#show_noise{type: 'checkbox'}
+    .input-group
+      %input#show_noise{type: 'checkbox'}
+      %label{for: 'show_noise'}
+        Show join/leave messages
 
     - if @is_today
       - last_id = @messages.last.id if @messages.any?
-      %a{href: '#', id: 'live_logging', style: 'display: none',
-         data: { channel:   channel_escape(@channel),
-                 lastId:    last_id,
-                 autostart: true }} Live updates
+      .input-group{style: 'display: none'}
+        %input#live_logging{type:  'checkbox',
+          data:  { channel:   channel_escape(@channel),
+                   lastId:    last_id,
+                   autostart: true }}
+        %label{for: 'live_logging'}
+          Live updates
 
   = haml :_messages, locals: { messages: @messages, dates: false }

@@ -210,8 +210,6 @@ var Live = {
 
     this.scroll();
     clearHighlight();
-
-    this.button.addClass('active');
   },
 
   stop: function() {
@@ -219,9 +217,6 @@ var Live = {
       this.eventSource.close();
 
     this.eventSource = null;
-
-    if(this.button)
-      this.button.removeClass('active');
   },
 
   scroll: function() {
@@ -236,18 +231,19 @@ var Live = {
     }
   },
 
-  init: function(button) {
-    this.button  = $(button);
-    this.channel = this.button.attr('data-channel');
-    this.lastId  = this.button.attr('data-lastId');
+  init: function(checkbox) {
+    this.checkbox = $(checkbox);
+    this.group    = this.checkbox.parent('.input-group');
+    this.channel  = this.checkbox.attr('data-channel');
+    this.lastId   = this.checkbox.attr('data-lastId');
 
     if(this.hasSupport()) {
       var $this = this;
 
-      this.button.show().click(function(e) {
+      this.group.show();
+      this.checkbox.prop('checked', true);
+      this.checkbox.change(function(e) {
         $this.toggle();
-
-        return false;
       });
     }
   }

@@ -39,6 +39,9 @@ input
     height: 18px
     align: center
 
+  &[type="checkbox"]
+    vertical-align: middle
+
 .clear-input
   display: inline-block
   position: relative
@@ -50,6 +53,11 @@ input
   background: no-repeat url(/images/clear.png)
   &:hover
     background-position: -12px 0
+
+.input-group
+  display: inline
+  border-left: 1px solid $color3
+  padding-left: 0.5em
 
 header
   background-color: $background
