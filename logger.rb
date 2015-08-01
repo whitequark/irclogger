@@ -31,6 +31,7 @@ bot = Cinch::Bot.new do
     c.user     = Config['username']
     c.password = Config['password'] unless Config['password'].nil?
     c.realname = Config['realname']
+    c.nicks    = [Config['nickname']]
     c.nick     = Config['nickname']
 
     # Logging config
