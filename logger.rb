@@ -41,7 +41,7 @@ bot = Cinch::Bot.new do
     c.plugins.plugins = [IrcLogger::CinchPlugin]
 
     # Trying to avoid "Excess Flood"
-    c.messages_per_second = 0.5
+    c.messages_per_second = 0.4
   end
 end
 
