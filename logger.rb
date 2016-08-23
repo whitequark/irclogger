@@ -5,8 +5,12 @@ $: << File.join(File.dirname(__FILE__), 'lib')
 require 'irclogger'
 require 'irclogger/cinch_plugin'
 require 'redis'
+require 'daemons'
+
+IrcLogger::CinchPlugin.redis = Redis.new(url: Config['redis'])
 
 pidfile = File.join(File.dirname(__FILE__), 'tmp', 'logger.pid')
+logfile = File.join(File.dirname(__FILE__), 'log', 'logger.log')
 
 begin
   old_pid = File.read(pidfile).to_i
@@ -14,10 +18,6 @@ begin
 
   raise "An existing logger process is running with pid #{old_pid}. Refusing to start"
 rescue Errno::ESRCH, Errno::ENOENT
-end
-
-File.open(pidfile, 'w') do |f|
-  f.write Process.pid
 end
 
 bot = Cinch::Bot.new do
@@ -42,9 +42,17 @@ bot = Cinch::Bot.new do
 
     # Trying to avoid "Excess Flood"
     c.messages_per_second = 0.4
+
   end
 end
 
-IrcLogger::CinchPlugin.redis = Redis.new(url: Config['redis'])
+# Who logs the loggers?
+bot.loggers.level = :info
+
+Daemonize.daemonize(logfile)
+
+File.open(pidfile, 'w') do |f|
+  f.write Process.pid
+end
 
 bot.start

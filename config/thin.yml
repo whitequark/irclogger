@@ -1,6 +1,7 @@
 ---
 environment: production
-pid: tmp/viewer.pid
 rackup: viewer.ru
+pid: tmp/viewer.pid
 log: log/viewer.log
 socket: tmp/viewer.sock
+daemonize: true

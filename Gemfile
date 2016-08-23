@@ -20,3 +20,4 @@ gem 'em-hiredis'
 gem 'thin'
 
 gem 'cinch'
+gem 'daemons'
