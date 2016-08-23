@@ -44,6 +44,7 @@ PLATFORMS
 
 DEPENDENCIES
   cinch
+  daemons
   em-hiredis
   haml
   mysql2
@@ -56,4 +57,4 @@ DEPENDENCIES
   thin
 
 BUNDLED WITH
-   1.11.2
+   1.12.5

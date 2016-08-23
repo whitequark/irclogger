@@ -17,7 +17,7 @@ Installation
 
   1. Make sure all dependencies are installed and configured.
   2. Create a MySQL database and import the schema from `config/sql/mysql-schema.sql`, or, create a PostgreSQL database and import the schema from `config/sql/postgresql-schema.sql`.
-  3. Run `bundle install --without postgresql` if you use MySQL, or `bundle install --without mysql` if you use PostgreSQL.
+  3. Run `bundle install --deployment --without postgresql` if you use MySQL, or `bundle install --deployment --without mysql` if you use PostgreSQL.
   3. Copy `config/application.yml.example` to `config/application.yml`.
   4. Edit `config/application.yml`. The fields should be self-documenting.
   6. Copy `config/nginx.conf.example` to `/etc/nginx/sites-enabled/irclogger`. Edit the `server_name`, `root` and `upstream` directives to match your setup.
@@ -48,5 +48,5 @@ Upgrading
 
   1. `git pull`
   2. Read the git log. I will mention if the updates change the schema, include breaking changes, etc.
-  3. Run `bundle`.
+  3. See step 3 of Installation above.
   3. Restart logger and viewer with `service irclogger-logger restart && service irclogger-viewer restart`.
