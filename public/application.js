@@ -23,25 +23,6 @@ function clearHighlight() {
   $('#clear_selection').removeClass("active");
 }
 
-function afterUpdate(where) {
-  where = where || $('#log');
-
-  if($('#log').attr('data-channel').indexOf('#teamhacksung') != -1) {
-    // dude
-    where.find('.nick').each(function() {
-      if(this.innerHTML.indexOf("nebkat") != -1) {
-        var name = this.textContent, newContent = "";
-        for(var i = 0; i < name.length; i++) {
-          var color = "color:rgb(" + (55 + Math.floor((Math.random()*200)+1)) + "," + (55 + Math.floor((Math.random()*200)+1)) + "," + (55 + Math.floor((Math.random()*200)+1)) + ")"
-
-          newContent += "<span style='" + color + "'>" + name[i] + "</span>";
-        }
-        this.innerHTML = newContent;
-      }
-    });
-  }
-}
-
 function highlightLine(id) {
   $(".log-messages > div").removeClass("highlight");
 
@@ -203,8 +184,6 @@ var Live = {
       if(event.lastEventId)
         $this.lastId = event.lastEventId;
 
-      afterUpdate(newContent);
-
       $this.scroll();
     };
 
@@ -337,7 +316,6 @@ $(document).ready(function() {
     Live.init('#live_logging');
 
   var anchor = hashUpdated(true);
-  afterUpdate();
 
   if($('#live_logging').attr('data-autostart') !== undefined &&
        anchor === undefined)
