@@ -19,7 +19,7 @@ START_ARGS="--chuid irclog -d ${ROOT}"
 
 DESC="irclogger logger"
 DAEMON=/usr/bin/bundle
-DAEMON_ARGS="exec ./logger.rb"
+DAEMON_ARGS="exec ${ROOT}/logger.rb"
 PIDFILE=${ROOT}/tmp/logger.pid
 
 do_stop_cmd() {

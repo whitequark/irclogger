@@ -49,6 +49,7 @@ end
 # Who logs the loggers?
 bot.loggers.level = :info
 
+DB.disconnect
 Daemonize.daemonize(logfile)
 
 File.open(pidfile, 'w') do |f|
