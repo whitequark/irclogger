@@ -8,7 +8,7 @@ Requirements
 
   * A Linux server. Non-Linux setups will probably work, but have never been tested.
   * Ruby  >= 1.9.3
-  * MySQL >= 5
+  * MySQL >= 5 or PostgreSQL >= 9.3
   * Redis >= 2.7
   * Nginx
 
@@ -18,7 +18,7 @@ Installation
 ------------
 
   1. Make sure all dependencies are installed and configured.
-  2. Create a MySQL database and import the schema from `config/schema.sql`.
+  2. Create a MySQL database and import the schema from `config/sql/mysql-schema.sql`, or, create a PostgreSQL database and import the schema from `config/sql/postgresql-schema.sql`.
   3. Copy `config/application.yml.example` to `config/application.yml`.
   4. Edit `config/application.yml`. The fields should be self-documenting.
   5. Edit `config/thin.yml` if you want to place the socket somewhere else than `/tmp/irclogger.sock`.
