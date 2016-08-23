@@ -1,5 +1,5 @@
 upstream irclogger {
-  server unix:/tmp/irclogger.sock;
+  server unix:/var/www/irclog/tmp/viewer.sock;
 }
 
 server {

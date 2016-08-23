@@ -3,5 +3,4 @@ environment: production
 pid: tmp/viewer.pid
 rackup: viewer.ru
 log: log/viewer.log
-socket: /tmp/irclogger.sock
-daemonize: true
+socket: tmp/viewer.sock
