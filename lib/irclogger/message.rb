@@ -94,9 +94,17 @@ class Message < Sequel::Model(:irclog)
   end
 
   def self.find_by_channel_and_fulltext(channel, query)
-    order(:timestamp).reverse.filter(:channel => channel).
-        filter('opcode is null').
-        filter('match (nick, line) against (? in boolean mode)', query)
+    dataset = order(:timestamp).reverse.filter(:channel => channel).
+        filter('opcode is null')
+    case DB.database_type
+    when :mysql2
+      dataset.filter('match (nick, line) against (? in boolean mode)', query)
+    when :postgres
+      dataset.filter("to_tsvector('english', nick || ' ' || line) @@ " \
+                     "plainto_tsquery('english', ?)", query)
+    else
+      raise NotImplementedError
+    end
   end
 
   def self.find_by_channel_and_nick(channel, query)

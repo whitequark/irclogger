@@ -13,6 +13,7 @@ GEM
     hiredis (0.5.2)
     multi_json (1.10.1)
     mysql2 (0.3.16)
+    pg (0.18.4)
     rack (1.5.2)
     rack-protection (1.5.3)
       rack
@@ -46,6 +47,7 @@ DEPENDENCIES
   em-hiredis
   haml
   mysql2
+  pg
   redis
   sass
   sequel

@@ -17,6 +17,7 @@ Installation
 
   1. Make sure all dependencies are installed and configured.
   2. Create a MySQL database and import the schema from `config/sql/mysql-schema.sql`, or, create a PostgreSQL database and import the schema from `config/sql/postgresql-schema.sql`.
+  3. Run `bundle install --without postgresql` if you use MySQL, or `bundle install --without mysql` if you use PostgreSQL.
   3. Copy `config/application.yml.example` to `config/application.yml`.
   4. Edit `config/application.yml`. The fields should be self-documenting.
   6. Copy `config/nginx.conf.example` to `/etc/nginx/sites-enabled/irclogger`. Edit the `server_name`, `root` and `upstream` directives to match your setup.

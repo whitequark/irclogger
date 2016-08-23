@@ -3,8 +3,9 @@
     How to search:
 
     %ul
-      %li
-        You can use standard <a href='http://dev.mysql.com/doc/refman/5.5/en/fulltext-boolean.html'>MySQL fulltext search</a> operations.
+      - if DB.database_type == :mysql2
+        %li
+          You can use standard <a href='http://dev.mysql.com/doc/refman/5.5/en/fulltext-boolean.html'>MySQL fulltext search</a> operations.
 
       %li
         You can fetch a history of kicks and bans of a particular user by searching for "kickban:username".

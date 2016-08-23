@@ -6,7 +6,14 @@ gem 'haml'
 gem 'sass'
 gem 'sequel'
 
-gem 'mysql2'
+group :mysql do
+  gem 'mysql2'
+end
+
+group :postgresql do
+  gem 'pg'
+end
+
 gem 'redis'
 gem 'em-hiredis'
 
