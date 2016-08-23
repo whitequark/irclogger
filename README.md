@@ -48,5 +48,5 @@ Upgrading
 
   1. `git pull`
   2. Read the git log. I will mention if the updates change the schema, include breaking changes, etc.
-  3. See step 3 of Installation above.
+  3. Run `bundle install --deployment`.
   3. Restart logger and viewer with `service irclogger-logger restart && service irclogger-viewer restart`.

@@ -2,4 +2,5 @@
 tmp/*
 log/*
 config/application.yml
-
+.bundle
+vendor/bundle
