@@ -15,14 +15,14 @@ fi
 # Author: whitequark <whitequark@whitequark.org>
 
 ROOT=/var/www/irclog
-START_ARGS="--chuid irclog"
+START_ARGS="--chuid irclog -d ${ROOT}"
 
 DESC="irclogger viewer"
-DAEMON=/usr/bin/thin
-DAEMON_ARGS="-c ${ROOT} -C ${ROOT}/config/thin.yml start"
+DAEMON=/usr/bin/bundle
+DAEMON_ARGS="exec thin -C config/thin.yml start"
 PIDFILE=${ROOT}/tmp/viewer.pid
 
 do_stop_cmd() {
   start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 \
-      --pidfile ${PIDFILE} --name $NAME
+      --pidfile ${PIDFILE} --exec /usr/bin/ruby
 }
