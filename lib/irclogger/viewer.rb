@@ -20,7 +20,24 @@ module IrcLogger
     helpers ViewerHelpers
 
     before do
-      @channels = DB["select channel from irclog group by channel"].map { |r| r[:channel] }
+      case DB.database_type
+      when :mysql2
+        @channels = DB["select channel from irclog group by channel"].map { |r| r[:channel] }
+      when :postgres
+        # https://wiki.postgresql.org/wiki/Loose_indexscan
+        @channels = DB[<<QUERY].map { |r| r[:channel] }
+with recursive t as (
+   select min(channel) as channel from irclog
+   union all
+   select (select min(channel) from irclog where channel > t.channel)
+   from t where t.channel is not null
+   )
+select channel from t where channel is not null
+union all
+select null where exists(select 1 from irclog where channel is null);
+QUERY
+      end
+
       if (hidden_channels = Config['hidden_channels'])
         @channels -= hidden_channels
       end
