@@ -7,7 +7,7 @@ $: << File.join(File.dirname(__FILE__), 'lib')
 require 'irclogger'
 
 pidfile    = File.join(File.dirname(__FILE__), 'tmp', 'logger.pid')
-executable = File.join(File.dirname(__FILE__), 'launch-logger.sh')
+executable = File.join(File.dirname(__FILE__), 'logger.rb')
 
 unless Message.any_recent_messages?
   puts "irclogger is stale, restarting"
