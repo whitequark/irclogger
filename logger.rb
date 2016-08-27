@@ -9,8 +9,8 @@ require 'daemons'
 
 IrcLogger::CinchPlugin.redis = Redis.new(url: Config['redis'])
 
-pidfile = File.join(File.dirname(__FILE__), 'tmp', 'logger.pid')
-logfile = File.join(File.dirname(__FILE__), 'log', 'logger.log')
+pidfile = File.join(File.expand_path(File.dirname(__FILE__)), 'tmp', 'logger.pid')
+logfile = File.join(File.expand_path(File.dirname(__FILE__)), 'log', 'logger.log')
 
 begin
   old_pid = File.read(pidfile).to_i
