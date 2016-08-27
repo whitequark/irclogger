@@ -94,14 +94,20 @@ class Message < Sequel::Model(:irclog)
   end
 
   def self.find_by_channel_and_fulltext(channel, query)
-    dataset = order(:timestamp).reverse.filter(:channel => channel).
-        filter('opcode is null')
     case DB.database_type
     when :mysql2
-      dataset.filter('match (nick, line) against (? in boolean mode)', query)
+      filter('match (nick, line) against (? in boolean mode)', query).
+          filter(:channel => channel).
+          filter('opcode is null').
+          order(:timestamp).reverse
     when :postgres
-      dataset.filter("to_tsvector('english', nick || ' ' || line) @@ " \
-                     "plainto_tsquery('english', ?)", query)
+      # postgres' query planner is dumb as a brick and will use any index
+      # except the btree_gin one if channel is specified as-is.
+      filter("to_tsvector('english', nick || ' ' || line) @@ " \
+             "plainto_tsquery('english', ?)", query).
+          filter("channel||'' = ?", channel).
+          filter('opcode is null').
+          order(:timestamp).reverse
     else
       raise NotImplementedError
     end
