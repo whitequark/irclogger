@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS btree_gin;
+
 DROP TABLE IF EXISTS irclog;
 CREATE TABLE irclog (
         id SERIAL,
@@ -16,4 +18,4 @@ CREATE INDEX irclog_channel_timestamp_index ON irclog (channel, timestamp);
 CREATE INDEX irclog_channel_opcode_index ON irclog (channel, opcode);
 CREATE INDEX irclog_channel_nick_index ON irclog (channel, nick);
 CREATE INDEX irclog_fulltext_index ON irclog
-  USING gin(to_tsvector('english', nick || ' ' || line));
+  USING gin(channel, to_tsvector('english', nick || ' ' || line));
