@@ -9,7 +9,7 @@ require 'irclogger'
 pidfile    = File.join(File.dirname(__FILE__), 'tmp', 'logger.pid')
 executable = File.join(File.dirname(__FILE__), 'logger.rb')
 
-unless Message.any_recent_messages?
+unless Message.any_recent_messages?(180)
   puts "irclogger is stale, restarting"
 
   begin
