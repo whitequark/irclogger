@@ -107,7 +107,7 @@ class Message < Sequel::Model(:irclog)
              "plainto_tsquery('english', ?)", query).
           filter("channel||'' = ?", channel).
           filter('opcode is null').
-          order(Sequel.lit("timestamp+0"))
+          order(Sequel.lit("timestamp+0")).reverse
     else
       raise NotImplementedError
     end
