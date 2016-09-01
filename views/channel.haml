@@ -21,4 +21,13 @@
         %label{for: 'live_logging'}
           Live updates
 
-  = haml :_messages, locals: { messages: @messages, dates: false }
+  %div{class: "log-messages with-panel"}
+    - if @topic
+      = haml :_message, locals: { message: @topic, mode: :topic }
+
+    - @messages.each do |message|
+      = haml :_message, locals: { message: message, mode: :normal }
+
+    - if @messages.empty?
+      There are no messages recorded for #{@date}.
+

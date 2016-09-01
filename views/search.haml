@@ -19,4 +19,12 @@
   - elsif @messages.nil? || @messages.empty?
     No messages are found.
   - else
-    = haml :_messages, locals: { messages: @messages, dates: true }
+    %div{class: "log-messages with-panel"}
+      - current_date = nil
+      - @messages.each do |message|
+        - message_date = Time.at(message.timestamp).gmtime.strftime("%Y-%m-%d")
+        - if current_date != message_date
+          - current_date = message_date
+          %h4= current_date
+        = haml :_message, locals: { message: message, mode: :search }
+

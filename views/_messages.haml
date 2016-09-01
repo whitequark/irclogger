@@ -1,9 +1,0 @@
-%div{class: "log-messages with-panel"}
-  - if @topic
-    = haml :_message, locals: { message: @topic, dates: true }
-
-  - messages.each do |message|
-    = haml :_message, locals: { message: message, dates: dates }
-
-  - if @messages.empty?
-    There are no messages recorded for #{params[:date]}.
