@@ -138,8 +138,17 @@ class Message < Sequel::Model(:irclog)
   end
 
   def self.date_index_for_channel(channel)
-    order(:timestamp).reverse.filter(channel: channel).
-        select{date(from_unixtime(timestamp)).as(:date)}.distinct.
-        map(:date)
+    case DB.database_type
+    when :mysql2
+      order(:date).reverse.filter(channel: channel).
+          select{date(from_unixtime(timestamp)).as(:date)}.distinct.
+          map(:date)
+    when :postgres
+      order(:date).reverse.filter(channel: channel).
+          select{date(to_timestamp(timestamp)).as(:date)}.distinct.
+          map(:date)
+    else
+      raise NotImplementedError
+    end
   end
 end
