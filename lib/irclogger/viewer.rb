@@ -90,7 +90,7 @@ QUERY
       render_one = lambda do |stream, message|
         stream << "id: #{message.id}\n"
 
-        html = haml(:_message, locals: { message: message, dates: false }, layout: false)
+        html = haml(:_message, locals: { message: message, mode: :normal }, layout: false)
         html.lines.each do |line|
           stream << "data: #{line}" # \n is already there
         end
