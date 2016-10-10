@@ -89,7 +89,7 @@ class Message < Sequel::Model(:irclog)
 
   def self.find_by_channel_and_kickban(channel, query)
     order(:timestamp).reverse.filter(:channel => channel).
-        filter('opcode = "kick" or opcode = "ban"').
+        filter('opcode = ? or opcode = ?', 'kick', 'ban').
         filter('nick like ?', query.strip + "%")
   end
 
