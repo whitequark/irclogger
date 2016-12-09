@@ -3,5 +3,7 @@ environment: production
 rackup: viewer.ru
 pid: tmp/viewer.pid
 log: log/viewer.log
+max_conns: 1024
+max_persistent_conns: 256
 socket: tmp/viewer.sock
 daemonize: true
