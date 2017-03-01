@@ -21,7 +21,7 @@ module IrcLogger
 
     before do
       case DB.database_type
-      when :mysql2
+      when :mysql
         @channels = DB["select channel from irclog group by channel"].map { |r| r[:channel] }
       when :postgres
         # https://wiki.postgresql.org/wiki/Loose_indexscan
