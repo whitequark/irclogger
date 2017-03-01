@@ -9,7 +9,7 @@ CREATE TABLE `irclog` (
         oper_nick VARCHAR(40),
         payload TEXT,
         PRIMARY KEY(`id`)
-) CHARSET=utf8 ENGINE=MyISAM;
+) CHARSET=utf8mb4 ENGINE=MyISAM;
 
 CREATE INDEX `irclog_channel_timestamp_index` ON `irclog` (channel, timestamp);
 CREATE INDEX `irclog_channel_opcode_index` ON `irclog` (channel, opcode);
