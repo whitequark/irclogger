@@ -95,7 +95,7 @@ class Message < Sequel::Model(:irclog)
 
   def self.find_by_channel_and_fulltext(channel, query)
     case DB.database_type
-    when :mysql2
+    when :mysql
       filter('match (nick, line) against (? in boolean mode)', query).
           filter(:channel => channel).
           filter('opcode is null').
@@ -139,7 +139,7 @@ class Message < Sequel::Model(:irclog)
 
   def self.date_index_for_channel(channel)
     case DB.database_type
-    when :mysql2
+    when :mysql
       order(:date).reverse.filter(channel: channel).
           select{date(from_unixtime(timestamp)).as(:date)}.distinct.
           map(:date)
