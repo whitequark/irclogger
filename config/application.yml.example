@@ -9,4 +9,7 @@ realname: whitequark's logger bot
 nickname: logger_test
 channels:
   - "#irclogger-test"
+  - "##irclogger-test"
+legacy_escaping_scheme:
+  - ".irclogger-test"
 domain: example.com
