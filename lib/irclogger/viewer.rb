@@ -11,7 +11,8 @@ require 'irclogger/viewer_helpers'
 module IrcLogger
   class Viewer < Sinatra::Base
     set :views,         File.expand_path('../../../views', __FILE__)
-    set :public_folder, File.expand_path('../../../public', __FILE__)
+    set :public_folder, File.expand_path('../../../public', __FILE__)    
+    set :protection, :except => :path_traversal 
 
     configure :development do
       register Sinatra::Reloader
