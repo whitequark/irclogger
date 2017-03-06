@@ -3,9 +3,25 @@ require 'zlib' # crc32
 module IrcLogger
   module ViewerHelpers
     include Rack::Utils
+    
+    def escape_url(url)
+        url.gsub("%", "%25").
+            gsub("/", "%2F").
+            gsub("\\", "%5C").
+            gsub("?", "%3F").
+            gsub("#", "%23").
+            gsub("`", "%60").
+            gsub("<", "%3C").
+            gsub(">", "%3E").
+            gsub("|", "%7C").
+            gsub("{", "%7B").
+            gsub("}", "%7D").
+            gsub("^", "%5E")
+    end
+        
 
     def channel_escape(channel)
-      CGI.escape(channel[1..-1]).gsub(/^#+/) { |m| '.' * m.length }
+      escape_url(channel[1..-1]).gsub(/^#+/) { |m| '.' * m.length }
     end
 
     def channel_unescape(channel)
