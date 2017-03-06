@@ -9,7 +9,7 @@ module IrcLogger
     end
 
     def channel_unescape(channel)
-      "##{CGI.unescape(channel).gsub(/^\.+/) { |m| '#' * m.length }}"
+      "##{channel.gsub(/^\.+/) { |m| '#' * m.length }}"
     end
 
     def channel_url(channel, postfix=nil)
