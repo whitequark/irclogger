@@ -20,14 +20,14 @@ module IrcLogger
       '^' => '~x~',
       '"' => '~d~'
     }
+    CHANNEL_ESCAPE_INVERTED = CHANNEL_ESCAPE.invert
     
     def escape_url(url)
       url.gsub(/(.)/) { |m| CHANNEL_ESCAPE.key?(m) ? CHANNEL_ESCAPE[m] : m }
     end
     
     def unescape_url(url)
-      inv = CHANNEL_ESCAPE.invert 
-      url.gsub(/~[^~]?~/) { |m| inv.key?(m) ? inv[m] : m }
+      url.gsub(/~[^~]?~/) { |m| CHANNEL_ESCAPE_INVERTED.key?(m) ? CHANNEL_ESCAPE_INVERTED[m] : m }
     end
         
 
