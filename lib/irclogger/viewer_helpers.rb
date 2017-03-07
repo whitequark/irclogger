@@ -3,13 +3,44 @@ require 'zlib' # crc32
 module IrcLogger
   module ViewerHelpers
     include Rack::Utils
+    
+    CHANNEL_ESCAPE = {
+      '~' => '~~',
+      '#' => '~h~',
+      '/' => '~s~',
+      '%' => '~p~',
+      '\\' => '~r~',
+      '?' => '~q~',
+      '`' => '~a~',
+      '<' => '~l~',
+      '>' => '~g~',
+      '|' => '~b~',
+      '{' => '~o~',
+      '}' => '~c~',
+      '^' => '~x~',
+      '"' => '~d~'
+    }
+    CHANNEL_ESCAPE_INVERTED = CHANNEL_ESCAPE.invert
+    
+    def escape_url(url)
+      url.gsub(/(.)/) { |m| CHANNEL_ESCAPE.key?(m) ? CHANNEL_ESCAPE[m] : m }
+    end
+    
+    def unescape_url(url)
+      url.gsub(/~[^~]?~/) { |m| CHANNEL_ESCAPE_INVERTED.key?(m) ? CHANNEL_ESCAPE_INVERTED[m] : m }
+    end
+        
 
     def channel_escape(channel)
-      channel[1..-1].gsub(/^#+/) { |m| '.' * m.length }
+      escape_url(channel[1..-1])
     end
 
     def channel_unescape(channel)
-      "##{channel.gsub(/^\.+/) { |m| '#' * m.length }}"
+      c = unescape_url(channel)
+      if Config.key?('legacy') && Config['legacy'].include?(c) then
+        "##{c.gsub(/^\.+/) { |m| '#' * m.length }}"
+      end
+      "##{c}"
     end
 
     def channel_url(channel, postfix=nil)
