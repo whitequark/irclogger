@@ -4,56 +4,30 @@ module IrcLogger
   module ViewerHelpers
     include Rack::Utils
     
+    CHANNEL_ESCAPE = {
+      '~' => '~~',
+      '#' => '~h~',
+      '/' => '~s~',
+      '%' => '~p~',
+      '\\' => '~r~',
+      '?' => '~q~',
+      '`' => '~a~',
+      '<' => '~l~',
+      '>' => '~g~',
+      '|' => '~b~',
+      '{' => '~o~',
+      '}' => '~c~',
+      '^' => '~x~',
+      '"' => '~d~'
+    }
+    
     def escape_url(url)
-        url.gsub('~', '~~').
-            gsub('#', '~h~').
-            gsub('/', '~s~').
-            gsub('%', '~p~').
-            gsub('\\', '~r~').
-            gsub('?', '~q~').
-            gsub('`', '~a~').
-            gsub('<', '~l~').
-            gsub('>', '~g~').
-            gsub('|', '~b~').
-            gsub('{', '~o~').
-            gsub('}', '~c~').
-            gsub('^', '~x~').
-            gsub('"', '~d~')
+      url.gsub(/(.)/) { |m| CHANNEL_ESCAPE.key?(m) ? CHANNEL_ESCAPE[m] : m }
     end
     
     def unescape_url(url)
-        i = 0
-        text = ""
-        parts = url.split('~', -1)
-        while i < parts.length do
-            if i.even?
-                text += parts[i]
-            else
-                if parts[i].length == 0
-                    text += '~'
-                else
-                    if parts[i].length  == 1
-                        text += parts[i].gsub('h', '#').
-                                         gsub('s', '/').
-                                         gsub('p', '%').
-                                         gsub('r', '\\').
-                                         gsub('q', '?').
-                                         gsub('a', '`').
-                                         gsub('l', '<').
-                                         gsub('g', '>').
-                                         gsub('b', '|').
-                                         gsub('o', '{').
-                                         gsub('c', '}').
-                                         gsub('x', '^').
-                                         gsub('d', '"')
-                    else
-                        text += parts[i]
-                    end
-                end
-            end
-            i += 1
-        end
-        text
+      inv = CHANNEL_ESCAPE.invert 
+      url.gsub(/~[^~]?~/) { |m| inv.key?(m) ? inv[m] : m }
     end
         
 
@@ -63,11 +37,10 @@ module IrcLogger
 
     def channel_unescape(channel)
       c = unescape_url(channel)
-      if Config.key?('legacy') and Config['legacy'].include? c
+      if Config.key?('legacy') && Config['legacy'].include?(c) then
         "##{c.gsub(/^\.+/) { |m| '#' * m.length }}"
-      else
-        "##{c}"
       end
+      "##{c}"
     end
 
     def channel_url(channel, postfix=nil)
