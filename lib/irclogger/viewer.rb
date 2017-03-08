@@ -130,7 +130,11 @@ QUERY
       @channel = channel_unescape(channel)
 
       if channel_escape(@channel) != channel # legacy escaping
-        redirect channel_url(@channel, "#{interval}.#{format}")
+        if format.nil?
+          redirect channel_url(@channel, "#{interval}")
+        else
+          redirect channel_url(@channel, "#{interval}.#{format}")
+        end
       end
 
       begin
