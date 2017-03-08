@@ -129,6 +129,10 @@ QUERY
 
       @channel = channel_unescape(channel)
 
+      if channel_escape(@channel) != channel # legacy escaping
+        redirect channel_url(@channel, "#{interval}.#{format}")
+      end
+
       begin
         if interval =~ /^\d+-\d+-\d+$/
           @date     = Date.parse(interval)
