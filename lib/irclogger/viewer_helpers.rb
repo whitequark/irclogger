@@ -35,12 +35,12 @@ module IrcLogger
     end
 
     def channel_unescape(channel)
-      c = unescape_url(channel)
       if (Config.key?('legacy_escaping_scheme') &&
           Config['legacy_escaping_scheme'].include?(c))
         "\##{c.gsub(/^\.+/) { |m| '#' * m.length }}"
+      else
+        "\##{unescape_url(channel)}"
       end
-      "\##{c}"
     end
 
     def channel_url(channel, postfix=nil)
