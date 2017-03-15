@@ -50,7 +50,7 @@ class Message < Sequel::Model(:irclog)
                   Time.utc(date.year, date.month, date.day).to_i,
                   Time.utc(day_after.year, day_after.month, day_after.day).to_i).
       filter(:channel => channel).
-      order(:timestamp)
+      order(:timestamp, :id)
   end
 
   def self.check_by_channel_and_date(channel, date)
@@ -65,7 +65,7 @@ class Message < Sequel::Model(:irclog)
 
     filter('timestamp > ? and timestamp < ?', from.to_i, to.to_i).
         filter(:channel => channel).
-        order(:timestamp)
+        order(:timestamp, :id)
   end
 
   def self.check_by_channel_and_month(channel, date)
