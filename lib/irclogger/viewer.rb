@@ -156,6 +156,10 @@ QUERY
       when 'txt'
         response['Content-Type'] = 'text/plain'
 
+        if params[:quiet]
+          @messages = @messages.only_talk
+        end
+
         @messages.map(&:to_s).join("\n")
       else
         @is_today = (@date == Time.now.gmtime.to_date)

@@ -151,4 +151,8 @@ class Message < Sequel::Model(:irclog)
       raise NotImplementedError
     end
   end
+
+  def self.only_talk
+    filter('opcode is null')
+  end
 end
