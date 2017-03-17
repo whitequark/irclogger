@@ -157,7 +157,7 @@ QUERY
         response['Content-Type'] = 'text/plain'
 
         if params[:quiet]
-          @messages = @messages.only_talk
+          @messages = @messages.filter('opcode is null')
         end
 
         @messages.map(&:to_s).join("\n")
