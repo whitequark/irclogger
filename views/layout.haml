@@ -17,9 +17,9 @@
 
   - if @channel
     %meta{name: 'description', content: "channel #{@channel} IRC chat logs"}
-  - if @messages && @messages.empty?
-    %meta{name: 'robots', content: 'noindex'}
-  - elsif !@channels.include?(@channel) # hidden channel
+  - if !@channels.include?(@channel) # hidden channel
+    %meta{name: 'robots', content: 'noindex, nofollow, nosnippet, noarchive'}
+  - elsif @messages && @messages.empty?
     %meta{name: 'robots', content: 'noindex'}
 
   %script{src: "/jquery.min.js"}
