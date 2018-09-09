@@ -5,11 +5,11 @@
   .talk
     %a.timestamp= now
     This is <a href="mailto:whitequark@whitequark.org">whitequark</a>'s IRC log viewer inspired by
-    <a href="http://github.com/cschneid">Chris Schneider</a>'s <a href="http://irclogger.com">irclogger.com</a>.
+    <a href="https://github.com/cschneid">Chris Schneider</a>'s <a href="http://irclogger.com">irclogger.com</a>.
 
   .talk
     %a.timestamp= now
-    The application works on Sinatra, and its source code is available on <a href="http://github.com/whitequark/irclogger">Github</a>.
+    The application works on Sinatra, and its source code is available on <a href="https://github.com/whitequark/irclogger">Github</a>.
 
   .talk
     %a.timestamp= now
@@ -25,8 +25,9 @@
 
   .talk
     %a.timestamp= now
-    If you want for this logger to be present on a particular <a href="http://freenode.net">freenode.net</a> channel, drop a letter to <a href="mailto:whitequark@whitequark.org">whitequark</a>.
+    If you want for this logger to be present on a particular #{Config['server']} channel, drop a letter to <a href="mailto:whitequark@whitequark.org">whitequark</a>.
 
   .talk
     %a.timestamp= now
-    This logger supports retrieving complete channel archives in text via <a href="http://lftp.yar.ru/">lftp</a>. Use <em>lftp -c 'mirror http://irclog.whitequark.org/$CHANNEL/index/'</em>.
+    This logger supports retrieving complete channel archives in text via <a href="http://lftp.yar.ru/">lftp</a>.
+    Use <em>lftp -c 'mirror https://#{Config['domain']}/$CHANNEL/index/'.

@@ -1,4 +1,4 @@
-# run as superuser: CREATE EXTENSION IF NOT EXISTS btree_gin;
+-- run as superuser: CREATE EXTENSION IF NOT EXISTS btree_gin;
 
 DROP TABLE IF EXISTS irclog;
 CREATE TABLE irclog (
