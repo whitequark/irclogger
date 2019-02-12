@@ -9,7 +9,12 @@ require 'irclogger'
 pidfile    = File.join(File.dirname(__FILE__), 'tmp', 'logger.pid')
 executable = File.join(File.dirname(__FILE__), 'logger.rb')
 
-unless Message.any_recent_messages?(180)
+timeout = 180
+if Config.include?("watchdog")
+  timeout = Config["watchdog"]["timeout"]
+end
+
+unless Message.any_recent_messages?(timeout)
   puts "irclogger is stale, restarting"
 
   begin

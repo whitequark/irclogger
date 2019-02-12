@@ -13,3 +13,6 @@ channels:
 legacy_escaping_scheme:
   - ".irclogger-test"
 domain: example.com
+
+watchdog:
+  timeout: 180
