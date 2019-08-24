@@ -126,7 +126,8 @@ class Message < Sequel::Model(:irclog)
   def self.most_recent_topic_for(channel, date)
     order(:timestamp).
         filter(channel: channel, opcode: 'topic').
-        filter('timestamp < ?', date.to_time.to_i).
+        filter('timestamp < ?',
+               Time.utc(date.year, date.month, date.day).to_i).
         last
   end
 
