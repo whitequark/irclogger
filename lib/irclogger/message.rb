@@ -46,7 +46,7 @@ class Message < Sequel::Model(:irclog)
   def self.find_by_channel_and_date(channel, date)
     day_after = date + 1
 
-    filter('timestamp > ? and timestamp < ?',
+    filter('timestamp >= ? and timestamp < ?',
                   Time.utc(date.year, date.month, date.day).to_i,
                   Time.utc(day_after.year, day_after.month, day_after.day).to_i).
       filter(:channel => channel).
@@ -63,7 +63,7 @@ class Message < Sequel::Model(:irclog)
     from = Time.utc(date.year, date.month, 1)
     to   = Time.utc((date >> 1).year, (date >> 1).month, 1) - 1
 
-    filter('timestamp > ? and timestamp < ?', from.to_i, to.to_i).
+    filter('timestamp >= ? and timestamp < ?', from.to_i, to.to_i).
         filter(:channel => channel).
         order(:timestamp, :id)
   end
@@ -72,7 +72,7 @@ class Message < Sequel::Model(:irclog)
     from = Time.utc(date.year, date.month, 1)
     to   = Time.utc((date >> 1).year, (date >> 1).month, 1) - 1
 
-    filter('timestamp > ? and timestamp < ?', from.to_i, to.to_i).
+    filter('timestamp >= ? and timestamp < ?', from.to_i, to.to_i).
         filter(:channel => channel).
         count > 0
   end
@@ -126,7 +126,7 @@ class Message < Sequel::Model(:irclog)
   def self.most_recent_topic_for(channel, date)
     order(:timestamp).
         filter(channel: channel, opcode: 'topic').
-        filter('timestamp < ?',
+        filter('timestamp <= ?',
                Time.utc(date.year, date.month, date.day).to_i).
         last
   end
