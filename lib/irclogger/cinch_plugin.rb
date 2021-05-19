@@ -21,7 +21,7 @@ module IrcLogger
 
     def post_message(*args)
       message = Message.create(*args)
-      redis.publish('message', "#{message.channel} #{message.id}")
+      redis.publish("message.#{Config['server']}", "#{message.channel} #{message.id}")
     end
 
     def options(message, other_options={})

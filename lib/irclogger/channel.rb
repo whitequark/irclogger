@@ -28,7 +28,7 @@ module IrcLogger
       EM::next_tick do
         pubsub = EM::Hiredis.connect(Config['redis']).pubsub
 
-        pubsub.subscribe('message')
+        pubsub.subscribe("message.#{Config['server']}")
 
         pubsub.on(:message) do |redis_channel, message|
           channel, message_id = message.split
