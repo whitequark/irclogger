@@ -154,7 +154,7 @@ QUERY
 
       case format
       when 'txt'
-        response['Content-Type'] = 'text/plain'
+        response['Content-Type'] = 'text/plain; charset=utf-8'
 
         if params[:quiet]
           @messages = @messages.filter('opcode is null')
