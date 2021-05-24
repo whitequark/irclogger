@@ -124,7 +124,7 @@ QUERY
       redirect to("/#{channel}/#{elem}"), 301
     end
 
-    get %r{/(.+?)/(.*)(?:\.(.+))?} do |channel, interval, format|
+    get %r{/(.+?)/(.*?)(?:\.(.+))?} do |channel, interval, format|
       pass if channel == '__sinatra__'
 
       @channel = channel_unescape(channel)
