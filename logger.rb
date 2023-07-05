@@ -26,6 +26,7 @@ bot = Cinch::Bot.new do
     c.server   = Config['server']
     c.port     = Config['port'] unless Config['port'].nil?
     c.ssl.use  = Config['ssl'] unless Config['ssl'].nil?
+    c.ssl.verify = Config['ssl_verify'] unless Config['ssl_verify'].nil?
 
     # Auth config
     c.user     = Config['username']
