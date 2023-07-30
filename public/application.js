@@ -232,12 +232,9 @@ $(window).hashchange(function() {
   hashUpdated(false);
 });
 
-function setTheme() {
-  if(docCookies.getItem('theme') == "dark") {
-    $('#stylesheet').attr('href', '/style-dark.css');
-  } else {
-    $('#stylesheet').attr('href', '/style-light.css');
-  }
+function setTheme(theme) {
+  console.log("setting theme to", theme);
+  $('#stylesheet').attr('href', '/style-' + theme + '.css');
 }
 
 $(document).ready(function() {
@@ -258,10 +255,30 @@ $(document).ready(function() {
       docCookies.setItem('theme', 'dark');
     }
 
-    setTheme();
+    console.log("manually switched theme to", docCookies.getItem('theme'));
+    setTheme(docCookies.getItem('theme'));
   });
 
-  setTheme();
+  var theme;
+  if(docCookies.getItem('theme')) {
+    theme = docCookies.getItem('theme');
+    console.log("cookies set theme to", theme);
+  } else {
+    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light";
+    console.log("browser preferences set theme to", theme);
+  }
+  setTheme(theme);
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    var theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light";
+    if(!docCookies.hasItem('theme')) {
+      console.log("browser preferences changed theme to", theme);
+      setTheme(theme);
+    } else {
+      console.log("browser preferences changed theme to", theme,
+                  "but cookies override theme to", docCookies.getItem('theme'));
+    }
+  });
 
   $("#clear_selection").click(function(event) {
     setHash("");
