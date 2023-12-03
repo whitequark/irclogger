@@ -60,7 +60,8 @@ module IrcLogger
         )
         (
           https?://|               # protocol spec, or
-          www\.                    # www.*
+          www\.|                   # www.*, or
+          web\+[a-z]+://(?:[^/@]+@)? # fedilinks support
         )
         (
           [-\w]+                   # subdomain or domain
@@ -80,7 +81,7 @@ module IrcLogger
           all
         else
           text = b + c
-          if text =~ %r{\Ahttps?://}
+          if text =~ %r{\Ahttps?://|\Aweb\+[a-z]+://}i
             link = text
           else
             link = "http://#{text}"
