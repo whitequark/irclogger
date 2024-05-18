@@ -7,7 +7,7 @@ files:
 database: postgres:///irclogs
 redis: redis://localhost:6379
 
-server: irc.freenode.net
+server: irc.libera.chat
 username: irclogger-test
 realname: whitequark's logger bot
 nickname: logger_test
