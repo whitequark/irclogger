@@ -1,4 +1,8 @@
-$: << File.join(File.dirname(__FILE__), 'lib')
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'bundler/setup'
+$: << File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'thin'
 require 'irclogger/config'

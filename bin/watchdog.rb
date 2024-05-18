@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-require "rubygems"
-require "bundler/setup"
-$: << File.join(File.dirname(__FILE__), 'lib')
+require 'rubygems'
+require 'bundler/setup'
+$: << File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'irclogger'
 

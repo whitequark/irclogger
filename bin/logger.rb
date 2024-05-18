@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-$: << File.join(File.dirname(__FILE__), 'lib')
+require 'rubygems'
+require 'bundler/setup'
+$: << File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'irclogger'
 require 'irclogger/cinch_plugin'
