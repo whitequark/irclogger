@@ -50,3 +50,8 @@ Upgrading
   2. Read the git log. I will mention if the updates change the schema, include breaking changes, etc.
   3. Run `bundle install --deployment`.
   3. Restart logger and viewer with `service irclogger-logger restart && service irclogger-viewer restart`.
+
+Development
+-----------
+
+After updating `Gemfile.lock`, run `bundix -l` to update `gemset.nix`. At the moment `bundix` must be run on Nix or from [this branch](https://github.com/whitequark/bundix/tree/digest).
