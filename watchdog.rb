@@ -6,7 +6,7 @@ $: << File.join(File.dirname(__FILE__), 'lib')
 
 require 'irclogger'
 
-pidfile    = File.join(File.dirname(__FILE__), 'tmp', 'logger.pid')
+pidfile    = File.join(Config['files']['tmp'], 'logger.pid')
 executable = File.join(File.dirname(__FILE__), 'logger.rb')
 
 timeout = 180

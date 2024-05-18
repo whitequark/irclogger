@@ -1,6 +1,10 @@
 ---
-database: mysql2://root@localhost/irclogs
-# database: postgres:///irclogs
+files:
+  log: "./log/"
+  tmp: "./tmp/"
+
+# database: mysql2://root@localhost/irclogs
+database: postgres:///irclogs
 redis: redis://localhost:6379
 
 server: irc.freenode.net
