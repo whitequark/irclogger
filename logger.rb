@@ -4,6 +4,7 @@ $: << File.join(File.dirname(__FILE__), 'lib')
 
 require 'irclogger'
 require 'irclogger/cinch_plugin'
+require 'irclogger/cinch_compat'
 require 'redis'
 require 'daemons'
 
