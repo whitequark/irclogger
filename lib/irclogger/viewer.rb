@@ -20,6 +20,8 @@ module IrcLogger
     helpers ViewerHelpers
 
     before do
+      @sass_cache_store = Sass::CacheStores::Memory.new
+
       case DB.database_type
       when :mysql
         @channels = DB["select channel from irclog group by channel"].map { |r| r[:channel] }
@@ -52,11 +54,11 @@ QUERY
     end
 
     get '/style-dark.css' do
-      sass :'style-dark'
+      sass :'style-dark', :cache_store => @sass_cache_store
     end
 
     get '/style-light.css' do
-      sass :'style-light'
+      sass :'style-light', :cache_store => @sass_cache_store
     end
 
     get '/:channel' do
