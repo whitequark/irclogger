@@ -10,7 +10,7 @@ function scrollTo(jqElem, delay) {
 }
 
 function prepareHighlight() {
-  Live.stop();
+  Live.force_off();
 
   $('#log').addClass("highlight");
   $("#log div.highlight").removeClass("highlight");
@@ -21,9 +21,13 @@ function clearHighlight() {
   $('#log').removeClass("highlight");
   $("#log div.highlight").removeClass("highlight");
   $('#clear_selection').removeClass("active");
+
+  setHash("");
 }
 
 function highlightLine(id) {
+  Live.force_off();
+
   $(".log-messages > div").removeClass("highlight");
 
   if((by_id = $("#" + id)).length) {
@@ -34,6 +38,8 @@ function highlightLine(id) {
 }
 
 function highlightLines(range) {
+  this.checkbox.prop('checked', true);
+
   range = range.map(function(e) { return parseInt(e, 10); }).sort();
 
   var first = range[0],
@@ -120,6 +126,8 @@ function setHash(selection, filter) {
   if(filter != null)    currentFilter = filter;
 
   var newHash = (currentSelection || '') + ';' + (currentFilter || '');
+  if(newHash == ';')
+    newHash = '';
   window.location.hash = '#' + newHash;
 }
 
@@ -202,11 +210,10 @@ var Live = {
     scrollTo($('.log-messages div:visible').last(), true);
   },
 
-  toggle: function() {
+  force_off: function() {
     if(this.active()) {
       this.stop();
-    } else {
-      this.start();
+      this.checkbox.attr('checked', false);
     }
   },
 
@@ -222,7 +229,10 @@ var Live = {
       this.group.show();
       this.checkbox.prop('checked', true);
       this.checkbox.change(function(e) {
-        $this.toggle();
+        if($this.checkbox.attr('checked'))
+          $this.start();
+        else
+          $this.stop();
       });
     }
   }
@@ -334,7 +344,10 @@ $(document).ready(function() {
 
   var anchor = hashUpdated(true);
 
-  if($('#live_logging').attr('data-autostart') !== undefined &&
-       anchor === undefined)
-    Live.toggle();
+  if($('#live_logging').attr('data-autostart') !== undefined && anchor === undefined) {
+    $('#live_logging').prop('checked', true);
+    Live.start();
+  } else {
+    $('#live_logging').prop('checked', false);
+  }
 });
