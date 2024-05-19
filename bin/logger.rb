@@ -50,14 +50,17 @@ bot = Cinch::Bot.new do
   end
 end
 
-# Who logs the loggers?
-bot.loggers.level = :info
-
-DB.disconnect
-Daemonize.daemonize(logfile)
-
 File.open(pidfile, 'w') do |f|
   f.write Process.pid
+end
+
+# Who logs the loggers?
+bot.loggers = Cinch::Logger::FormattedLogger.new(File.open(logfile, 'a'))
+bot.loggers.level = :info
+
+if Config['daemonize']
+  DB.disconnect
+  Daemonize.daemonize
 end
 
 bot.start

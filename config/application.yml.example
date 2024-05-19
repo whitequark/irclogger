@@ -3,6 +3,8 @@ files:
   log: "./log/"
   tmp: "./tmp/"
 
+daemonize: true
+
 # database: mysql2://root@localhost/irclogs
 database: postgres:///irclogs
 redis: redis://localhost:6379
