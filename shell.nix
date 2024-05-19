@@ -14,5 +14,6 @@ pkgs.mkShell {
   packages = with pkgs; [
     bundix
     env
+    util-linux
   ];
 }
