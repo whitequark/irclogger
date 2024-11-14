@@ -10,12 +10,15 @@ pidfile    = File.join(Config['files']['tmp'], 'logger.pid')
 executable = File.join(File.dirname(__FILE__), 'logger.rb')
 
 timeout = 180
+respawn = true
 if Config.include?("watchdog")
   timeout = Config["watchdog"]["timeout"]
+  respawn = Config["watchdog"]["respawn"]
 end
 
 unless Message.any_recent_messages?(timeout)
-  puts "irclogger is stale, restarting"
+  verb = respawn ? "restarting" : "terminating"
+  puts "irclogger is stale, #{verb}"
 
   begin
     pid = File.read(pidfile).to_i
@@ -24,5 +27,7 @@ unless Message.any_recent_messages?(timeout)
     puts "cannot kill: #{e.message}"
   end
 
-  Process.spawn(executable)
+  if respawn
+    Process.spawn(executable)
+  end
 end
