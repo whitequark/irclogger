@@ -12,7 +12,7 @@ Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
 
 if Config['web'].include? ':'
-  host, port = Config['web'].split(':')
+  host, _, port = Config['web'].rpartition(':')
   server_args = [host, port.to_i]
 else
   server_args = [File.expand_path(Config['web'], Config['files']['tmp'])]
