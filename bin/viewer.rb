@@ -15,7 +15,7 @@ if Config['web'].include? ':'
   host, port = Config['web'].split(':')
   server_args = [host, port.to_i]
 else
-  server_args = [File.join(Config['files']['tmp'], Config['web'])]
+  server_args = [File.expand_path(Config['web'], Config['files']['tmp'])]
 end
 
 server = Thin::Server.new(*server_args) do
