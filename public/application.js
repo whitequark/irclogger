@@ -38,8 +38,6 @@ function highlightLine(id) {
 }
 
 function highlightLines(range) {
-  this.checkbox.prop('checked', true);
-
   range = range.map(function(e) { return parseInt(e, 10); }).sort();
 
   var first = range[0],
