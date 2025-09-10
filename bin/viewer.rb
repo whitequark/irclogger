@@ -25,6 +25,9 @@ server = Thin::Server.new(*server_args) do
 end
 server.maximum_connections = 1024
 server.maximum_persistent_connections = 256
+server.threaded = true
+server.no_epoll = true
+server.threadpool_size = 32
 server.pid_file = File.join(Config['files']['tmp'], 'viewer.pid')
 server.log_file = File.join(Config['files']['log'], 'viewer.log')
 server.reopen_log
