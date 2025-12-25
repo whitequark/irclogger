@@ -35,6 +35,10 @@ bot = Cinch::Bot.new do
     c.user     = Config['username']
     c.password = Config['password'] unless Config['password'].nil?
     c.realname = Config['realname']
+    if Config['sasl']
+      c.sasl.username = Config['username']
+      c.sasl.password = Config['password']
+    end
     c.nicks    = [Config['nickname']]
     c.nick     = Config['nickname']
 

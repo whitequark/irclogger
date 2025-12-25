@@ -12,6 +12,8 @@ web: localhost:4000
 
 server: irc.libera.chat
 username: irclogger-test
+# password:
+sasl: false
 realname: whitequark's logger bot
 nickname: logger_test
 channels:
