@@ -21,7 +21,7 @@ channels:
   - "##irclogger-test"
 legacy_escaping_scheme:
   - ".irclogger-test"
-domain: example.com
+domain: irclog.example.com
 
 watchdog:
   timeout: 180

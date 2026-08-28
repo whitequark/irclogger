@@ -3,10 +3,13 @@ upstream irclogger {
 }
 
 server {
-  listen [::];
-  server_name irclog.foobar.org;
+  listen [::]:80;
+  listen 80;
+  server_name irclog.example.com;
 
   root /var/www/irclog/public;
+
+  proxy_set_header Host $host;
 
   location / {
     if (!-f $request_filename) {
