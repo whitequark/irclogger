@@ -1,0 +1,14 @@
+[Unit]
+Description=irclogger watchdog
+After=network-online.target irclogger.service
+Requires=irclogger.service
+
+[Service]
+Type=oneshot
+ExecStart=bundle exec /var/www/irclog/bin/watchdog.rb
+User=irclog
+WorkingDirectory=~
+RuntimeDirectory=irclogger
+
+[Install]
+WantedBy=multi-user.target

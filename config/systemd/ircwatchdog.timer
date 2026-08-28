@@ -1,0 +1,12 @@
+[Unit]
+Description=irclogger watchdog timer
+
+[Timer]
+Unit=ircwatchdog.service
+# This is *when* the watchdog runs, not the inactivity timeout (see application config for that)
+# -> If you change this, also adapt irclogger.service's StartLimit.
+OnBootSec=5m
+OnUnitActiveSec=5m
+
+[Install]
+WantedBy=timers.target
