@@ -8,7 +8,10 @@ daemonize: true
 # database: mysql2://root@localhost/irclogs
 database: postgres:///irclogs
 redis: redis://localhost:6379
-web: localhost:4000
+# IPv6, IPv4, socket
+# web: localhost:4000
+# web: 127.0.0.1:4000
+web: viewer.sock
 
 server: irc.libera.chat
 username: irclogger-test
