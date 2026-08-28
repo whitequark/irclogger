@@ -3,6 +3,7 @@ files:
   log: "./log/"
   tmp: "./tmp/"
 
+# systemd: this should be false
 daemonize: true
 
 # database: mysql2://root@localhost/irclogs
@@ -31,4 +32,5 @@ domain: irclog.example.com
 
 watchdog:
   timeout: 180
+# systemd: this should be false
   respawn: true

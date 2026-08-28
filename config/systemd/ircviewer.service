@@ -1,0 +1,14 @@
+[Unit]
+Description=irclogger viewer
+After=network-online.target
+
+[Service]
+ExecStart=bundle exec /var/www/irclog/bin/viewer.rb
+Restart=on-failure
+RestartSec=10s
+User=irclog
+WorkingDirectory=~
+RuntimeDirectory=irclogger
+
+[Install]
+WantedBy=multi-user.target

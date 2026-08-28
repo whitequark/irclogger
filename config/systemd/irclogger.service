@@ -1,0 +1,18 @@
+[Unit]
+Description=irclogger
+After=network-online.target
+# Adapt this accordingly if you change the watchdog trigger
+StartLimitIntervalSec=10m
+StartLimitBurst=10
+
+[Service]
+ExecStart=bundle exec /var/www/irclog/bin/logger.rb
+# Restart even when cleanly exited by watchdog service/timer
+Restart=always
+RestartSec=10s
+User=irclog
+WorkingDirectory=~
+RuntimeDirectory=irclogger
+
+[Install]
+WantedBy=multi-user.target
