@@ -22,6 +22,9 @@ nickname: logger_test
 channels:
   - "#irclogger-test"
   - "##irclogger-test"
+  - "#irclogger-test-hidden"
+hidden_channels:
+  - "#irclogger-test-hidden"
 legacy_escaping_scheme:
   - ".irclogger-test"
 domain: irclog.example.com
