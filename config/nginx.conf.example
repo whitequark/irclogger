@@ -16,4 +16,14 @@ server {
       proxy_pass http://irclogger;
     }
   }
+
+  location ~* \.(?:css|js)$ {
+    proxy_pass http://irclogger;
+    proxy_cache_use_stale updating;
+    proxy_cache_background_update on;
+    proxy_cache_lock on;
+
+    expires 7d;
+    add_header Cache-Control "max-age=604800, public";
+  }
 }
